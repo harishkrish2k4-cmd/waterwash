@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # AutoCare Pro - Vehicle Service Website
 
 A modern, professional vehicle service website with Firebase authentication, Firestore database, and membership management system.
@@ -324,3 +325,6 @@ This project is created for AutoCare Pro. All rights reserved.
 #   W a t e r w a s h 
  
  
+=======
+# waterwash
+>>>>>>> 737c8d10ef2e9f28beaf57f5c37d8e1bb933cfac
