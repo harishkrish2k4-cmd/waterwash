@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Admin login for AutoCare Pro">
+    <title>Admin Login - AutoCare Pro</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="../css/styles.css">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+
+    <!-- Admin Login Section -->
+    <section
+        style="min-height: 100vh; background: linear-gradient(135deg, #1a2332 0%, #2563eb 100%); display: flex; align-items: center; justify-content: center; padding: 2rem;">
+        <div style="max-width: 450px; width: 100%;">
+
+            <!-- Login Card -->
+            <div class="card" style="padding: 3rem;">
+                <div class="text-center mb-4">
+                    <div class="card-icon" style="margin: 0 auto; width: 80px; height: 80px; font-size: 2rem;">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h1 style="font-size: 2rem; margin-top: 1.5rem;">Admin Access</h1>
+                    <p style="color: var(--gray);">Login to AutoCare Pro Admin Dashboard</p>
+                </div>
+
+                <!-- Login Form -->
+                <form id="adminLoginForm">
+
+                    <!-- Email -->
+                    <div class="form-group">
+                        <label for="email" class="form-label">
+                            <i class="fas fa-envelope"></i> Admin Email
+                        </label>
+                        <input type="email" id="email" name="email" class="form-input" placeholder="Enter admin email"
+                            required>
+                        <div class="form-error">Please enter a valid email address</div>
+                    </div>
+
+                    <!-- Password -->
+                    <div class="form-group">
+                        <label for="password" class="form-label">
+                            <i class="fas fa-lock"></i> Password
+                        </label>
+                        <input type="password" id="password" name="password" class="form-input"
+                            placeholder="Enter password" required>
+                        <div class="form-error">Please enter your password</div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1.5rem;">
+                        <i class="fas fa-sign-in-alt"></i> Login to Dashboard
+                    </button>
+                </form>
+
+                <!-- Back to Home Link -->
+                <div class="text-center" style="margin-top: 1.5rem;">
+                    <a href="../index.html" style="color: var(--gray); font-size: 0.875rem;">
+                        <i class="fas fa-arrow-left"></i> Back to Home
+                    </a>
+                </div>
+
+            </div>
+
+            <!-- Security Notice -->
+            <div class="card"
+                style="margin-top: 1.5rem; background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); color: white; border: 1px solid rgba(255, 255, 255, 0.2);">
+                <p style="margin: 0; font-size: 0.875rem; color: rgba(255, 255, 255, 0.9);">
+                    <i class="fas fa-info-circle"></i>
+                    <strong>Security Notice:</strong> This area is restricted to authorized administrators only. All
+                    access attempts are logged.
+                </p>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- JavaScript -->
+    <script src="../js/main.js" type="module"></script>
+    <script type="module">
+        import { adminLogin } from '../js/admin-auth.js';
+        import {
+            validateEmail,
+            showLoading,
+            hideLoading,
+            showError,
+            hideError,
+            showNotification
+        } from '../js/main.js';
+
+        const form = document.getElementById('adminLoginForm');
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+
+        // Clear errors on input
+        emailInput.addEventListener('input', () => hideError(emailInput));
+        passwordInput.addEventListener('input', () => hideError(passwordInput));
+
+        // Form submission
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            // Clear all errors
+            hideError(emailInput);
+            hideError(passwordInput);
+
+            // Get values
+            const email = emailInput.value.trim();
+            const password = passwordInput.value;
+
+            // Validate
+            let hasError = false;
+
+            if (!validateEmail(email)) {
+                showError(emailInput, 'Please enter a valid email address');
+                hasError = true;
+            }
+
+            if (!password) {
+                showError(passwordInput, 'Please enter your password');
+                hasError = true;
+            }
+
+            if (hasError) return;
+
+            // Submit
+            const submitBtn = form.querySelector('button[type="submit"]');
+            showLoading(submitBtn);
+
+            const result = await adminLogin(email, password);
+
+            hideLoading(submitBtn);
+
+            if (result.success) {
+                showNotification('Login successful! Redirecting to dashboard...', 'success');
+
+                // Redirect to dashboard after 1 second
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 1000);
+            } else {
+                showNotification(result.error, 'error');
+            }
+        });
+    </script>
+</body>
+
+</html>

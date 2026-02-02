@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Admin dashboard for AutoCare Pro">
+    <title>Admin Dashboard - AutoCare Pro</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="../css/styles.css">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="../index.html" class="navbar-brand">
+                <i class="fas fa-car"></i>
+                AutoCare Pro - Admin
+            </a>
+
+            <ul class="navbar-menu">
+                <li><a href="dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                <li><a href="../index.html"><i class="fas fa-home"></i> Main Site</a></li>
+                <li><a href="#" id="adminLogoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Dashboard Container -->
+    <div class="dashboard-container">
+        <div class="container">
+
+            <!-- Dashboard Header -->
+            <div class="dashboard-header">
+                <h1><i class="fas fa-tachometer-alt"></i> Admin Dashboard</h1>
+                <p style="color: var(--gray); margin: 0;">Welcome, <span id="adminName">Admin</span></p>
+            </div>
+
+            <!-- Statistics Cards -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="totalUsers">0</h3>
+                        <p>Total Users</p>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: linear-gradient(135deg, #10b981 0%, #34d399 100%);">
+                        <i class="fas fa-user-check"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="activeMembers">0</h3>
+                        <p>Active Members</p>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);">
+                        <i class="fas fa-crown"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="yearlyMembers">0</h3>
+                        <p>Yearly Members</p>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%);">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="activeAccounts">0</h3>
+                        <p>Active Accounts</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- User Management Table -->
+            <div class="data-table">
+                <div class="table-header">
+                    <h3 style="margin: 0;"><i class="fas fa-users-cog"></i> User Management</h3>
+                    <div class="search-box">
+                        <input type="text" id="searchInput" placeholder="Search users..." style="width: 250px;">
+                        <select id="membershipFilter" class="form-input" style="width: 150px; padding: 0.625rem 1rem;">
+                            <option value="all">All Memberships</option>
+                            <option value="monthly">Monthly</option>
+                            <option value="halfYearly">Half-Yearly</option>
+                            <option value="yearly">Yearly</option>
+                        </select>
+                        <select id="statusFilter" class="form-input" style="width: 150px; padding: 0.625rem 1rem;">
+                            <option value="all">All Status</option>
+                            <option value="active">Active</option>
+                            <option value="inactive">Inactive</option>
+                        </select>
+                        <button class="btn btn-primary btn-small" id="exportBtn">
+                            <i class="fas fa-download"></i> Export CSV
+                        </button>
+                    </div>
+                </div>
+
+                <div style="overflow-x: auto;">
+                    <table id="usersTable">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                                <th>Membership</th>
+                                <th>Status</th>
+                                <th>Account</th>
+                                <th>Joined</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="usersTableBody">
+                            <tr>
+                                <td colspan="8" style="text-align: center; padding: 3rem;">
+                                    <i class="fas fa-spinner fa-spin"
+                                        style="font-size: 2rem; color: var(--primary-blue);"></i>
+                                    <p style="margin-top: 1rem; color: var(--gray);">Loading users...</p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Edit User Modal (Simple) -->
+    <div id="editModal" class="hidden"
+        style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.7); z-index: 9999; display: none; align-items: center; justify-content: center; padding: 2rem;">
+        <div class="card" style="max-width: 500px; width: 100%; padding: 2rem;" onclick="event.stopPropagation();">
+            <h3 style="margin-bottom: 1.5rem;">Edit User</h3>
+
+            <div class="form-group">
+                <label class="form-label">Membership Plan</label>
+                <select id="editMembershipPlan" class="form-input">
+                    <option value="">None</option>
+                    <option value="monthly">Monthly</option>
+                    <option value="halfYearly">Half-Yearly</option>
+                    <option value="yearly">Yearly</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Account Status</label>
+                <select id="editAccountStatus" class="form-input">
+                    <option value="active">Active</option>
+                    <option value="inactive">Inactive</option>
+                </select>
+            </div>
+
+            <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
+                <button class="btn btn-primary" id="saveUserBtn" style="flex: 1;">
+                    <i class="fas fa-save"></i> Save Changes
+                </button>
+                <button class="btn btn-secondary" id="cancelEditBtn" style="flex: 1;">
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="../js/main.js" type="module"></script>
+    <script type="module">
+        import { protectAdminPage, adminLogout, checkAdminAuthState } from '../js/admin-auth.js';
+        import {
+            getAllUsers,
+            getUserStatistics,
+            updateUserMembership,
+            updateUserAccountStatus,
+            searchUsers,
+            filterUsersByMembership,
+            filterUsersByAccountStatus,
+            exportUsersToCSV,
+            formatDate,
+            formatMembershipPlan
+        } from '../js/admin-dashboard.js';
+        import { showNotification, showLoading, hideLoading } from '../js/main.js';
+
+        // Protect this page
+        protectAdminPage();
+
+        let allUsers = [];
+        let filteredUsers = [];
+        let currentEditUserId = null;
+
+        // Load dashboard data
+        async function loadDashboard() {
+            // Get users
+            const usersResult = await getAllUsers();
+
+            if (!usersResult.success) {
+                showNotification('Failed to load users: ' + usersResult.error, 'error');
+                return;
+            }
+
+            allUsers = usersResult.users;
+            filteredUsers = allUsers;
+
+            // Get statistics
+            const statsResult = await getUserStatistics();
+
+            if (statsResult.success) {
+                const stats = statsResult.stats;
+                document.getElementById('totalUsers').textContent = stats.totalUsers;
+                document.getElementById('activeMembers').textContent = stats.activeMembers;
+                document.getElementById('yearlyMembers').textContent = stats.yearlyMembers;
+                document.getElementById('activeAccounts').textContent = stats.activeAccounts;
+            }
+
+            // Render users table
+            renderUsersTable(filteredUsers);
+        }
+
+        // Render users table
+        function renderUsersTable(users) {
+            const tbody = document.getElementById('usersTableBody');
+
+            if (users.length === 0) {
+                tbody.innerHTML = `
+          <tr>
+            <td colspan="8" style="text-align: center; padding: 3rem; color: var(--gray);">
+              <i class="fas fa-users" style="font-size: 2rem; opacity: 0.3;"></i>
+              <p style="margin-top: 1rem;">No users found</p>
+            </td>
+          </tr>
+        `;
+                return;
+            }
+
+            tbody.innerHTML = users.map(user => `
+        <tr>
+          <td><strong>${user.fullName || 'N/A'}</strong></td>
+          <td>${user.email || 'N/A'}</td>
+          <td>${user.phone || 'N/A'}</td>
+          <td>
+            <span class="badge ${user.membershipPlan ? 'badge-success' : 'badge-warning'}">
+              ${formatMembershipPlan(user.membershipPlan)}
+            </span>
+          </td>
+          <td>
+            <span class="badge ${user.membershipStatus === 'active' ? 'badge-success' : 'badge-warning'}">
+              ${user.membershipStatus || 'inactive'}
+            </span>
+          </td>
+          <td>
+            <span class="badge ${user.accountStatus === 'active' ? 'badge-success' : 'badge-error'}">
+              ${user.accountStatus || 'active'}
+            </span>
+          </td>
+          <td>${formatDate(user.createdAt)}</td>
+          <td>
+            <button class="btn btn-small" onclick="editUser('${user.id}')" style="padding: 0.375rem 0.75rem;">
+              <i class="fas fa-edit"></i>
+            </button>
+          </td>
+        </tr>
+      `).join('');
+        }
+
+        // Edit user
+        window.editUser = function (userId) {
+            const user = allUsers.find(u => u.id === userId);
+            if (!user) return;
+
+            currentEditUserId = userId;
+            document.getElementById('editMembershipPlan').value = user.membershipPlan || '';
+            document.getElementById('editAccountStatus').value = user.accountStatus || 'active';
+            const modal = document.getElementById('editModal');
+            modal.classList.remove('hidden');
+            modal.style.display = 'flex';
+        };
+
+        // Save user changes
+        document.getElementById('saveUserBtn').addEventListener('click', async () => {
+            if (!currentEditUserId) return;
+
+            const membershipPlan = document.getElementById('editMembershipPlan').value;
+            const accountStatus = document.getElementById('editAccountStatus').value;
+
+            const saveBtn = document.getElementById('saveUserBtn');
+            showLoading(saveBtn);
+
+            // Update membership
+            const membershipResult = await updateUserMembership(currentEditUserId, membershipPlan || null);
+
+            // Update account status
+            const statusResult = await updateUserAccountStatus(currentEditUserId, accountStatus);
+
+            hideLoading(saveBtn);
+
+            if (membershipResult.success && statusResult.success) {
+                showNotification('User updated successfully!', 'success');
+                const modal = document.getElementById('editModal');
+                modal.classList.add('hidden');
+                modal.style.display = 'none';
+                currentEditUserId = null;
+                loadDashboard();
+            } else {
+                showNotification('Failed to update user', 'error');
+            }
+        });
+
+        // Cancel edit
+        document.getElementById('cancelEditBtn').addEventListener('click', () => {
+            const modal = document.getElementById('editModal');
+            modal.classList.add('hidden');
+            modal.style.display = 'none';
+            currentEditUserId = null;
+        });
+
+        // Close modal when clicking outside
+        document.getElementById('editModal').addEventListener('click', (e) => {
+            if (e.target.id === 'editModal') {
+                const modal = document.getElementById('editModal');
+                modal.classList.add('hidden');
+                modal.style.display = 'none';
+                currentEditUserId = null;
+            }
+        });
+
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            applyFilters();
+        });
+
+        // Membership filter
+        document.getElementById('membershipFilter').addEventListener('change', () => {
+            applyFilters();
+        });
+
+        // Status filter
+        document.getElementById('statusFilter').addEventListener('change', () => {
+            applyFilters();
+        });
+
+        // Apply all filters
+        function applyFilters() {
+            const searchTerm = document.getElementById('searchInput').value;
+            const membershipFilter = document.getElementById('membershipFilter').value;
+            const statusFilter = document.getElementById('statusFilter').value;
+
+            let filtered = allUsers;
+
+            // Apply search
+            filtered = searchUsers(filtered, searchTerm);
+
+            // Apply membership filter
+            filtered = filterUsersByMembership(filtered, membershipFilter);
+
+            // Apply status filter
+            filtered = filterUsersByAccountStatus(filtered, statusFilter);
+
+            filteredUsers = filtered;
+            renderUsersTable(filteredUsers);
+        }
+
+        // Export to CSV
+        document.getElementById('exportBtn').addEventListener('click', () => {
+            exportUsersToCSV(filteredUsers);
+        });
+
+        // Logout
+        document.getElementById('adminLogoutBtn').addEventListener('click', async (e) => {
+            e.preventDefault();
+
+            const result = await adminLogout();
+
+            if (result.success) {
+                showNotification('Logged out successfully', 'success');
+                setTimeout(() => {
+                    window.location.href = 'login.html';
+                }, 1000);
+            }
+        });
+
+        // Set admin name
+        checkAdminAuthState((user, isAdmin) => {
+            if (user && isAdmin) {
+                document.getElementById('adminName').textContent = user.email.split('@')[0];
+            }
+        });
+
+        // Load dashboard on page load
+        loadDashboard();
+    </script>
+</body>
+
+</html>

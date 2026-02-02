@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Login to your AutoCare Pro account">
+    <title>Login - AutoCare Pro</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="css/styles.css">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="navbar-brand">
+                <i class="fas fa-car"></i>
+                AutoCare Pro
+            </a>
+
+            <button class="navbar-toggle" aria-label="Toggle navigation">
+                <i class="fas fa-bars"></i>
+            </button>
+
+            <ul class="navbar-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="index.html#about">About</a></li>
+                <li><a href="index.html#services">Services</a></li>
+                <li><a href="memberships.html">Memberships</a></li>
+                <li><a href="register.html">Register</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Login Section -->
+    <section class="section"
+        style="padding-top: 120px; min-height: 100vh; background: linear-gradient(135deg, #f8fafc 0%, #e0e7ff 100%); display: flex; align-items: center;">
+        <div class="container">
+            <div style="max-width: 450px; margin: 0 auto;">
+
+                <!-- Login Card -->
+                <div class="card" style="padding: 3rem;">
+                    <div class="text-center mb-4">
+                        <div class="card-icon" style="margin: 0 auto; width: 80px; height: 80px; font-size: 2rem;">
+                            <i class="fas fa-sign-in-alt"></i>
+                        </div>
+                        <h1 style="font-size: 2rem; margin-top: 1.5rem;">Welcome Back</h1>
+                        <p style="color: var(--gray);">Login to your AutoCare Pro account</p>
+                    </div>
+
+                    <!-- Login Form -->
+                    <form id="loginForm">
+
+                        <!-- Email -->
+                        <div class="form-group">
+                            <label for="email" class="form-label">
+                                <i class="fas fa-envelope"></i> Email Address
+                            </label>
+                            <input type="email" id="email" name="email" class="form-input"
+                                placeholder="Enter your email" required>
+                            <div class="form-error">Please enter a valid email address</div>
+                        </div>
+
+                        <!-- Password -->
+                        <div class="form-group">
+                            <label for="password" class="form-label">
+                                <i class="fas fa-lock"></i> Password
+                            </label>
+                            <input type="password" id="password" name="password" class="form-input"
+                                placeholder="Enter your password" required>
+                            <div class="form-error">Please enter your password</div>
+                        </div>
+
+                        <!-- Forgot Password Link -->
+                        <div style="text-align: right; margin-bottom: 1.5rem;">
+                            <a href="#" style="color: var(--primary-blue); font-size: 0.875rem;">Forgot Password?</a>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">
+                            <i class="fas fa-sign-in-alt"></i> Login
+                        </button>
+                    </form>
+
+                    <!-- Register Link -->
+                    <div class="text-center" style="margin-top: 1.5rem;">
+                        <p style="color: var(--gray);">
+                            Don't have an account?
+                            <a href="register.html" style="color: var(--primary-blue); font-weight: 600;">Register
+                                here</a>
+                        </p>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- JavaScript -->
+    <script src="js/main.js" type="module"></script>
+    <script type="module">
+        import { loginUser } from './js/auth.js';
+        import {
+            validateEmail,
+            showLoading,
+            hideLoading,
+            showError,
+            hideError,
+            showNotification
+        } from './js/main.js';
+
+        const form = document.getElementById('loginForm');
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+
+        // Clear errors on input
+        emailInput.addEventListener('input', () => hideError(emailInput));
+        passwordInput.addEventListener('input', () => hideError(passwordInput));
+
+        // Form submission
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            // Clear all errors
+            hideError(emailInput);
+            hideError(passwordInput);
+
+            // Get values
+            const email = emailInput.value.trim();
+            const password = passwordInput.value;
+
+            // Validate
+            let hasError = false;
+
+            if (!validateEmail(email)) {
+                showError(emailInput, 'Please enter a valid email address');
+                hasError = true;
+            }
+
+            if (!password) {
+                showError(passwordInput, 'Please enter your password');
+                hasError = true;
+            }
+
+            if (hasError) return;
+
+            // Submit
+            const submitBtn = form.querySelector('button[type="submit"]');
+            showLoading(submitBtn);
+
+            const result = await loginUser(email, password);
+
+            hideLoading(submitBtn);
+
+            if (result.success) {
+                showNotification('Login successful! Redirecting...', 'success');
+
+                // Redirect to memberships page after 1 second
+                setTimeout(() => {
+                    window.location.href = 'memberships.html';
+                }, 1000);
+            } else {
+                showNotification(result.error, 'error');
+            }
+        });
+    </script>
+</body>
+
+</html>

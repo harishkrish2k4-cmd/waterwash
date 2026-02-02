@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Choose the perfect membership plan for your vehicle service needs">
+    <title>Membership Plans - AutoCare Pro</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="css/styles.css">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="navbar-brand">
+                <i class="fas fa-car"></i>
+                AutoCare Pro
+            </a>
+
+            <button class="navbar-toggle" aria-label="Toggle navigation">
+                <i class="fas fa-bars"></i>
+            </button>
+
+            <ul class="navbar-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="index.html#about">About</a></li>
+                <li><a href="index.html#services">Services</a></li>
+                <li><a href="memberships.html" class="btn btn-primary btn-small">Memberships</a></li>
+                <li><a href="login.html">Login</a></li>
+                <li><a href="#" id="logoutBtn" class="hidden">Logout</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="section"
+        style="padding-top: 120px; background: linear-gradient(135deg, #1a2332 0%, #2563eb 100%); color: white; text-align: center;">
+        <div class="container">
+            <h1 style="color: white; font-size: 3rem;">Choose Your Membership Plan</h1>
+            <p style="font-size: 1.25rem; color: rgba(255, 255, 255, 0.9); max-width: 700px; margin: 0 auto;">
+                Select the perfect plan for your vehicle service needs. All plans include our commitment to quality and
+                customer satisfaction.
+            </p>
+        </div>
+    </section>
+
+    <!-- Membership Plans Section -->
+    <section class="section" style="background: var(--light-gray); padding: 4rem 0;">
+        <div class="container">
+
+            <div class="grid grid-3">
+
+                <!-- Monthly Plan -->
+                <div class="membership-card">
+                    <div class="membership-header">
+                        <div class="card-icon" style="margin: 0 auto;">
+                            <i class="fas fa-calendar-alt"></i>
+                        </div>
+                        <h3 class="membership-title">Monthly Membership</h3>
+                        <div class="membership-price">$29</div>
+                        <div class="membership-period">per month</div>
+                    </div>
+
+                    <ul class="membership-features">
+                        <li>Basic vehicle servicing</li>
+                        <li>Oil change included</li>
+                        <li>Emergency roadside assistance</li>
+                        <li>Priority booking</li>
+                        <li>Free vehicle wash</li>
+                        <li>10% discount on parts</li>
+                    </ul>
+
+                    <button class="btn btn-primary subscribe-btn" data-plan="monthly" style="width: 100%;">
+                        <i class="fas fa-check-circle"></i> Subscribe Now
+                    </button>
+                </div>
+
+                <!-- Half-Yearly Plan (Recommended) -->
+                <div class="membership-card recommended">
+                    <div class="membership-header">
+                        <div class="card-icon" style="margin: 0 auto;">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <h3 class="membership-title">Half-Yearly Membership</h3>
+                        <div class="membership-price">$149</div>
+                        <div class="membership-period">per 6 months</div>
+                        <p style="color: var(--success); font-weight: 600; font-size: 0.875rem; margin-top: 0.5rem;">
+                            Save $25 compared to monthly!
+                        </p>
+                    </div>
+
+                    <ul class="membership-features">
+                        <li>All monthly benefits</li>
+                        <li>Free tire rotation</li>
+                        <li>Battery check & service</li>
+                        <li>AC system inspection</li>
+                        <li>Priority service</li>
+                        <li>15% discount on parts</li>
+                        <li>Free towing service</li>
+                    </ul>
+
+                    <button class="btn btn-primary subscribe-btn" data-plan="halfYearly" style="width: 100%;">
+                        <i class="fas fa-check-circle"></i> Subscribe Now
+                    </button>
+                </div>
+
+                <!-- Yearly Plan -->
+                <div class="membership-card">
+                    <div class="membership-header">
+                        <div class="card-icon" style="margin: 0 auto;">
+                            <i class="fas fa-crown"></i>
+                        </div>
+                        <h3 class="membership-title">Yearly Membership</h3>
+                        <div class="membership-price">$269</div>
+                        <div class="membership-period">per year</div>
+                        <p style="color: var(--success); font-weight: 600; font-size: 0.875rem; margin-top: 0.5rem;">
+                            Save $79 - Best Value!
+                        </p>
+                    </div>
+
+                    <ul class="membership-features">
+                        <li>All half-yearly benefits</li>
+                        <li>Full vehicle maintenance</li>
+                        <li>Free comprehensive inspections</li>
+                        <li>Brake system service</li>
+                        <li>Premium 24/7 support</li>
+                        <li>20% discount on parts</li>
+                        <li>Free pickup & delivery</li>
+                        <li>Complimentary detailing</li>
+                    </ul>
+
+                    <button class="btn btn-primary subscribe-btn" data-plan="yearly" style="width: 100%;">
+                        <i class="fas fa-check-circle"></i> Subscribe Now
+                    </button>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Comparison Section -->
+    <section class="section">
+        <div class="container">
+            <div class="text-center mb-4">
+                <h2>Compare Plans</h2>
+                <p>See what's included in each membership tier</p>
+            </div>
+
+            <div class="card" style="overflow-x: auto;">
+                <table style="min-width: 600px;">
+                    <thead>
+                        <tr>
+                            <th>Feature</th>
+                            <th style="text-align: center;">Monthly</th>
+                            <th style="text-align: center;">Half-Yearly</th>
+                            <th style="text-align: center;">Yearly</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Basic vehicle servicing</td>
+                            <td style="text-align: center;"><i class="fas fa-check" style="color: var(--success);"></i>
+                            </td>
+                            <td style="text-align: center;"><i class="fas fa-check" style="color: var(--success);"></i>
+                            </td>
+                            <td style="text-align: center;"><i class="fas fa-check" style="color: var(--success);"></i>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Emergency assistance</td>
+                            <td style="text-align: center;"><i class="fas fa-check" style="color: var(--success);"></i>
+                            </td>
+                            <td style="text-align: center;"><i class="fas fa-check" style="color: var(--success);"></i>
+                            </td>
+                            <td style="text-align: center;"><i class="fas fa-check" style="color: var(--success);"></i>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Parts discount</td>
+                            <td style="text-align: center;">10%</td>
+                            <td style="text-align: center;">15%</td>
+                            <td style="text-align: center;">20%</td>
+                        </tr>
+                        <tr>
+                            <td>Free tire rotation</td>
+                            <td style="text-align: center;"><i class="fas fa-times" style="color: var(--error);"></i>
+                            </td>
+                            <td style="text-align: center;"><i class="fas fa-check" style="color: var(--success);"></i>
+                            </td>
+                            <td style="text-align: center;"><i class="fas fa-check" style="color: var(--success);"></i>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Free towing service</td>
+                            <td style="text-align: center;"><i class="fas fa-times" style="color: var(--error);"></i>
+                            </td>
+                            <td style="text-align: center;"><i class="fas fa-check" style="color: var(--success);"></i>
+                            </td>
+                            <td style="text-align: center;"><i class="fas fa-check" style="color: var(--success);"></i>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Comprehensive inspections</td>
+                            <td style="text-align: center;"><i class="fas fa-times" style="color: var(--error);"></i>
+                            </td>
+                            <td style="text-align: center;"><i class="fas fa-times" style="color: var(--error);"></i>
+                            </td>
+                            <td style="text-align: center;"><i class="fas fa-check" style="color: var(--success);"></i>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Free pickup & delivery</td>
+                            <td style="text-align: center;"><i class="fas fa-times" style="color: var(--error);"></i>
+                            </td>
+                            <td style="text-align: center;"><i class="fas fa-times" style="color: var(--error);"></i>
+                            </td>
+                            <td style="text-align: center;"><i class="fas fa-check" style="color: var(--success);"></i>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Complimentary detailing</td>
+                            <td style="text-align: center;"><i class="fas fa-times" style="color: var(--error);"></i>
+                            </td>
+                            <td style="text-align: center;"><i class="fas fa-times" style="color: var(--error);"></i>
+                            </td>
+                            <td style="text-align: center;"><i class="fas fa-check" style="color: var(--success);"></i>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="section section-light">
+        <div class="container">
+            <div class="text-center mb-4">
+                <h2>Frequently Asked Questions</h2>
+            </div>
+
+            <div style="max-width: 800px; margin: 0 auto;">
+                <div class="card mb-3">
+                    <h4><i class="fas fa-question-circle" style="color: var(--primary-blue);"></i> Can I upgrade my
+                        membership?</h4>
+                    <p style="margin: 0;">Yes! You can upgrade to a higher tier at any time. The price difference will
+                        be prorated.</p>
+                </div>
+
+                <div class="card mb-3">
+                    <h4><i class="fas fa-question-circle" style="color: var(--primary-blue);"></i> What happens if I
+                        cancel?</h4>
+                    <p style="margin: 0;">You can cancel anytime. Your benefits will continue until the end of your
+                        current billing period.</p>
+                </div>
+
+                <div class="card mb-3">
+                    <h4><i class="fas fa-question-circle" style="color: var(--primary-blue);"></i> Are there any hidden
+                        fees?</h4>
+                    <p style="margin: 0;">No hidden fees! The membership price covers all listed services. Additional
+                        repairs are quoted separately.</p>
+                </div>
+
+                <div class="card">
+                    <h4><i class="fas fa-question-circle" style="color: var(--primary-blue);"></i> How do I schedule a
+                        service?</h4>
+                    <p style="margin: 0;">Members can schedule services through our website, mobile app, or by calling
+                        our 24/7 support line.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>AutoCare Pro</h3>
+                    <p>Your trusted partner in vehicle maintenance and care. Providing professional service since 2010.
+                    </p>
+                    <div class="social-links">
+                        <a href="#" class="social-link" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-link" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-link" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-link" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <p><a href="index.html#about">About Us</a></p>
+                    <p><a href="index.html#services">Services</a></p>
+                    <p><a href="memberships.html">Memberships</a></p>
+                    <p><a href="index.html#contact">Contact</a></p>
+                </div>
+
+                <div class="footer-section">
+                    <h3>Services</h3>
+                    <p><a href="index.html#services">Oil Change</a></p>
+                    <p><a href="index.html#services">Brake Service</a></p>
+                    <p><a href="index.html#services">Diagnostics</a></p>
+                    <p><a href="index.html#services">Emergency Help</a></p>
+                </div>
+
+                <div class="footer-section">
+                    <h3>Contact Info</h3>
+                    <p><i class="fas fa-map-marker-alt"></i> 123 Service Street, Auto City</p>
+                    <p><i class="fas fa-phone"></i> +1 (555) 123-4567</p>
+                    <p><i class="fas fa-envelope"></i> info@autocarepro.com</p>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2026 AutoCare Pro. All rights reserved. | <a href="#">Privacy Policy</a> | <a href="#">Terms
+                        of Service</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="js/main.js" type="module"></script>
+    <script type="module">
+        import { initMembershipsPage } from './js/memberships.js';
+        import { checkAuthState, logoutUser } from './js/auth.js';
+        import { showNotification } from './js/main.js';
+
+        // Initialize memberships page
+        initMembershipsPage();
+
+        // Handle logout
+        const logoutBtn = document.getElementById('logoutBtn');
+
+        checkAuthState((user) => {
+            if (user) {
+                logoutBtn.classList.remove('hidden');
+            } else {
+                logoutBtn.classList.add('hidden');
+            }
+        });
+
+        logoutBtn.addEventListener('click', async (e) => {
+            e.preventDefault();
+            const result = await logoutUser();
+
+            if (result.success) {
+                showNotification('Logged out successfully', 'success');
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 1000);
+            }
+        });
+    </script>
+</body>
+
+</html>

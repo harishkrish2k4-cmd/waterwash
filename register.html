@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Register for AutoCare Pro membership and enjoy exclusive benefits">
+    <title>Register - AutoCare Pro</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="css/styles.css">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="navbar-brand">
+                <i class="fas fa-car"></i>
+                AutoCare Pro
+            </a>
+
+            <button class="navbar-toggle" aria-label="Toggle navigation">
+                <i class="fas fa-bars"></i>
+            </button>
+
+            <ul class="navbar-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="index.html#about">About</a></li>
+                <li><a href="index.html#services">Services</a></li>
+                <li><a href="memberships.html">Memberships</a></li>
+                <li><a href="login.html">Login</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Registration Section -->
+    <section class="section"
+        style="padding-top: 120px; min-height: 100vh; background: linear-gradient(135deg, #f8fafc 0%, #e0e7ff 100%);">
+        <div class="container">
+            <div style="max-width: 500px; margin: 0 auto;">
+
+                <!-- Registration Card -->
+                <div class="card" style="padding: 3rem;">
+                    <div class="text-center mb-4">
+                        <div class="card-icon" style="margin: 0 auto; width: 80px; height: 80px; font-size: 2rem;">
+                            <i class="fas fa-user-plus"></i>
+                        </div>
+                        <h1 style="font-size: 2rem; margin-top: 1.5rem;">Create Account</h1>
+                        <p style="color: var(--gray);">Join AutoCare Pro and enjoy exclusive benefits</p>
+                    </div>
+
+                    <!-- Registration Form -->
+                    <form id="registerForm">
+
+                        <!-- Full Name -->
+                        <div class="form-group">
+                            <label for="fullName" class="form-label">
+                                <i class="fas fa-user"></i> Full Name
+                            </label>
+                            <input type="text" id="fullName" name="fullName" class="form-input"
+                                placeholder="Enter your full name" required>
+                            <div class="form-error">Please enter your full name</div>
+                        </div>
+
+                        <!-- Email -->
+                        <div class="form-group">
+                            <label for="email" class="form-label">
+                                <i class="fas fa-envelope"></i> Email Address
+                            </label>
+                            <input type="email" id="email" name="email" class="form-input"
+                                placeholder="Enter your email" required>
+                            <div class="form-error">Please enter a valid email address</div>
+                        </div>
+
+                        <!-- Phone -->
+                        <div class="form-group">
+                            <label for="phone" class="form-label">
+                                <i class="fas fa-phone"></i> Phone Number
+                            </label>
+                            <input type="tel" id="phone" name="phone" class="form-input"
+                                placeholder="Enter your phone number" required>
+                            <div class="form-error">Please enter a valid phone number</div>
+                        </div>
+
+                        <!-- Password -->
+                        <div class="form-group">
+                            <label for="password" class="form-label">
+                                <i class="fas fa-lock"></i> Password
+                            </label>
+                            <input type="password" id="password" name="password" class="form-input"
+                                placeholder="Create a password (min 6 characters)" required>
+                            <div class="form-error">Password must be at least 6 characters</div>
+                        </div>
+
+                        <!-- Confirm Password -->
+                        <div class="form-group">
+                            <label for="confirmPassword" class="form-label">
+                                <i class="fas fa-lock"></i> Confirm Password
+                            </label>
+                            <input type="password" id="confirmPassword" name="confirmPassword" class="form-input"
+                                placeholder="Confirm your password" required>
+                            <div class="form-error">Passwords do not match</div>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1.5rem;">
+                            <i class="fas fa-user-plus"></i> Create Account
+                        </button>
+                    </form>
+
+                    <!-- Login Link -->
+                    <div class="text-center" style="margin-top: 1.5rem;">
+                        <p style="color: var(--gray);">
+                            Already have an account?
+                            <a href="login.html" style="color: var(--primary-blue); font-weight: 600;">Login here</a>
+                        </p>
+                    </div>
+
+                </div>
+
+                <!-- Benefits Section -->
+                <div class="card"
+                    style="margin-top: 2rem; background: linear-gradient(135deg, #1a2332 0%, #2563eb 100%); color: white;">
+                    <h3 style="color: white; margin-bottom: 1rem;">
+                        <i class="fas fa-gift"></i> Member Benefits
+                    </h3>
+                    <ul style="list-style: none; padding: 0;">
+                        <li style="padding: 0.5rem 0; display: flex; align-items: center; gap: 0.75rem;">
+                            <i class="fas fa-check-circle" style="color: #10b981;"></i>
+                            <span>Priority service and support</span>
+                        </li>
+                        <li style="padding: 0.5rem 0; display: flex; align-items: center; gap: 0.75rem;">
+                            <i class="fas fa-check-circle" style="color: #10b981;"></i>
+                            <span>Exclusive membership discounts</span>
+                        </li>
+                        <li style="padding: 0.5rem 0; display: flex; align-items: center; gap: 0.75rem;">
+                            <i class="fas fa-check-circle" style="color: #10b981;"></i>
+                            <span>Free vehicle inspections</span>
+                        </li>
+                        <li style="padding: 0.5rem 0; display: flex; align-items: center; gap: 0.75rem;">
+                            <i class="fas fa-check-circle" style="color: #10b981;"></i>
+                            <span>24/7 emergency assistance</span>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- JavaScript -->
+    <script src="js/main.js" type="module"></script>
+    <script type="module">
+        import { registerUser } from './js/auth.js';
+        import {
+            validateEmail,
+            validatePhone,
+            validatePassword,
+            showLoading,
+            hideLoading,
+            showError,
+            hideError,
+            showNotification
+        } from './js/main.js';
+
+        const form = document.getElementById('registerForm');
+        const inputs = {
+            fullName: document.getElementById('fullName'),
+            email: document.getElementById('email'),
+            phone: document.getElementById('phone'),
+            password: document.getElementById('password'),
+            confirmPassword: document.getElementById('confirmPassword')
+        };
+
+        // Clear errors on input
+        Object.values(inputs).forEach(input => {
+            input.addEventListener('input', () => hideError(input));
+        });
+
+        // Form submission
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            // Clear all errors
+            Object.values(inputs).forEach(input => hideError(input));
+
+            // Get values
+            const fullName = inputs.fullName.value.trim();
+            const email = inputs.email.value.trim();
+            const phone = inputs.phone.value.trim();
+            const password = inputs.password.value;
+            const confirmPassword = inputs.confirmPassword.value;
+
+            // Validate
+            let hasError = false;
+
+            if (!fullName || fullName.length < 2) {
+                showError(inputs.fullName, 'Please enter your full name');
+                hasError = true;
+            }
+
+            if (!validateEmail(email)) {
+                showError(inputs.email, 'Please enter a valid email address');
+                hasError = true;
+            }
+
+            if (!validatePhone(phone)) {
+                showError(inputs.phone, 'Please enter a valid phone number');
+                hasError = true;
+            }
+
+            if (!validatePassword(password)) {
+                showError(inputs.password, 'Password must be at least 6 characters');
+                hasError = true;
+            }
+
+            if (password !== confirmPassword) {
+                showError(inputs.confirmPassword, 'Passwords do not match');
+                hasError = true;
+            }
+
+            if (hasError) return;
+
+            // Submit
+            const submitBtn = form.querySelector('button[type="submit"]');
+            showLoading(submitBtn);
+
+            const result = await registerUser(fullName, email, phone, password);
+
+            hideLoading(submitBtn);
+
+            if (result.success) {
+                showNotification('Account created successfully! Redirecting...', 'success');
+
+                // Redirect to memberships page after 1.5 seconds
+                setTimeout(() => {
+                    window.location.href = 'memberships.html';
+                }, 1500);
+            } else {
+                showNotification(result.error, 'error');
+            }
+        });
+    </script>
+</body>
+
+</html>
