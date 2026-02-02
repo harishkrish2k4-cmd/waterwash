@@ -187,7 +187,7 @@ Edit CSS variables in `css/styles.css`:
 }
 ```
 
-### Add/Remove Services
+### Add/Remove Servicesll'
 
 Edit the services section in `index.html` (around line 200)
 
@@ -321,5 +321,6 @@ This project is created for AutoCare Pro. All rights reserved.
 ---
 
 **Built with ❤️ for AutoCare Pro**
-#   W a t e r w a s h  
+#   W a t e r w a s h 
+ 
  
