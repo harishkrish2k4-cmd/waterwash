@@ -62,24 +62,34 @@ Water/
 
 ### Step 4: Set Up Security Rules
 
-In Firestore Database → **Rules**, replace the default rules with:
+In Firestore Database → **Rules**, replace the default rules with the following. These rules allow anyone to read services and plans, but only authorized admins can edit them.
 
 ```javascript
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
+    // Public read access for services and membership plans
+    match /services/{serviceId} {
+      allow read: if true;
+      allow write: if request.auth != null && 
+                     exists(/databases/$(database)/documents/admins/$(request.auth.uid));
+    }
+    
+    match /membershipPlans/{planId} {
+      allow read: if true;
+      allow write: if request.auth != null && 
+                     exists(/databases/$(database)/documents/admins/$(request.auth.uid));
+    }
+
     // User rules - users can read/write their own data
     match /users/{userId} {
       allow read, write: if request.auth != null && request.auth.uid == userId;
-      // Admins can read all users
-      allow read: if request.auth != null && 
-                     exists(/databases/$(database)/documents/admins/$(request.auth.uid));
-      // Admins can update user data
-      allow update: if request.auth != null && 
-                       exists(/databases/$(database)/documents/admins/$(request.auth.uid));
+      // Admins can read/update all users
+      allow read, update: if request.auth != null && 
+                            exists(/databases/$(database)/documents/admins/$(request.auth.uid));
     }
     
-    // Admin rules - only admins can access
+    // Admin rules
     match /admins/{adminId} {
       allow read: if request.auth != null && request.auth.uid == adminId;
       allow write: if false; // Admins must be created manually
