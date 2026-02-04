@@ -10,34 +10,38 @@ export let membershipPlans = {};
 
 // Fetch membership plans from Firestore
 export async function fetchMembershipPlans() {
+    console.log('fetchMembershipPlans: Starting...');
     try {
         const plansRef = collection(db, 'membershipPlans');
-        // Temporarily remove orderBy to rule out indexing issues
-        const querySnapshot = await getDocs(plansRef);
+
+        const timeout = new Promise((_, reject) =>
+            setTimeout(() => reject(new Error('Membership Fetch Timeout (10s)')), 10000)
+        );
+
+        const fetchPromise = getDocs(plansRef);
+        console.log('fetchMembershipPlans: Waiting for getDocs...');
+
+        const querySnapshot = await Promise.race([fetchPromise, timeout]);
+        console.log('fetchMembershipPlans: Success, size:', querySnapshot.size);
 
         const plans = {};
         querySnapshot.forEach((doc) => {
             plans[doc.id] = doc.data();
         });
 
-        // Convert to array and sort manually by price
-        const plansArray = Object.entries(plans).map(([id, data]) => ({ id, ...data }));
-        plansArray.sort((a, b) => a.price - b.price);
-
-        // Re-construct the plans object in sorted order if needed, 
-        // but for membershipPlans variable we'll keep it as the plans object
         membershipPlans = plans;
         return { success: true, plans };
     } catch (error) {
-        console.error('Error fetching membership plans:', error);
+        console.error('fetchMembershipPlans: FAILED', error);
+
         const container = document.getElementById('membershipPlansContainer');
         if (container) {
             container.innerHTML = `
-                <div class="text-center" style="grid-column: 1 / -1; padding: 2rem; color: #ef4444; background: rgba(239, 68, 68, 0.1); border-radius: 8px; border: 1px solid #ef4444;">
-                    <i class="fas fa-exclamation-circle" style="font-size: 2rem; margin-bottom: 1rem;"></i>
-                    <h3 style="color: #ef4444;">Unable to load plans</h3>
-                    <p style="margin: 0.5rem 0;">${error.message}</p>
-                    <button onclick="location.reload()" class="btn btn-secondary mt-2">Retry Loading</button>
+                <div class="text-center" style="grid-column: 1 / -1; padding: 2rem; color: #ef4444;">
+                    <i class="fas fa-exclamation-triangle" style="font-size: 2rem; margin-bottom: 1rem;"></i>
+                    <h3 style="color: #ef4444;">Error Loading Plans</h3>
+                    <p>${error.message}</p>
+                    <button onclick="location.reload()" class="btn btn-secondary mt-2">Retry</button>
                 </div>
             `;
         }
@@ -50,78 +54,21 @@ export async function subscribeMembership(planType) {
     const user = auth.currentUser;
 
     if (!user) {
-        showNotification('Please login to subscribe to a membership', 'error');
-        setTimeout(() => {
-            window.location.href = 'login.html';
-        }, 1500);
+        showNotification('Please login to subscribe', 'error');
         return { success: false, error: 'Not authenticated' };
     }
 
     try {
-        // Update user document with membership info
         await updateDoc(doc(db, 'users', user.uid), {
             membershipPlan: planType,
             membershipStartDate: serverTimestamp(),
             membershipStatus: 'active'
         });
-
         return { success: true };
     } catch (error) {
         console.error('Subscription error:', error);
         return { success: false, error: error.message };
     }
-}
-
-// Initialize membership page
-export async function initMembershipsPage() {
-    console.log('Initializing Memberships Page...');
-    // Fetch plans first
-    const result = await fetchMembershipPlans();
-    console.log('Fetch Plans Result:', result);
-
-    // Render plans if container exists
-    renderMembershipPlans();
-
-    // Check if user is logged in
-    let currentUser = null;
-
-    checkAuthState((user) => {
-        currentUser = user;
-        updateSubscribeButtons(user);
-    });
-
-    // Add event listeners to subscribe buttons
-    const subscribeButtons = document.querySelectorAll('.subscribe-btn');
-
-    subscribeButtons.forEach(button => {
-        button.addEventListener('click', async (e) => {
-            e.preventDefault();
-            const planType = button.dataset.plan;
-
-            if (!currentUser) {
-                showNotification('Please login or register to subscribe', 'error');
-                setTimeout(() => {
-                    window.location.href = 'register.html';
-                }, 1500);
-                return;
-            }
-
-            showLoading(button);
-
-            const result = await subscribeMembership(planType);
-
-            hideLoading(button);
-
-            if (result.success) {
-                showNotification('Successfully subscribed to ' + membershipPlans[planType].name + '!', 'success');
-                button.textContent = 'Subscribed ✓';
-                button.disabled = true;
-                button.style.background = '#10b981';
-            } else {
-                showNotification('Subscription failed. Please try again.', 'error');
-            }
-        });
-    });
 }
 
 // Render membership plans dynamically
@@ -130,70 +77,61 @@ function renderMembershipPlans() {
     if (!container) return;
 
     if (Object.keys(membershipPlans).length === 0) {
-        container.innerHTML = '<p class="text-center">No membership plans available.</p>';
+        container.innerHTML = '<p class="text-center">No membership plans found.</p>';
         return;
     }
 
-    container.innerHTML = Object.entries(membershipPlans).map(([id, plan]) => `
+    // Convert to array and sort by price
+    const plansArray = Object.entries(membershipPlans).map(([id, data]) => ({ id, ...data }));
+    plansArray.sort((a, b) => (a.price || 0) - (b.price || 0));
+
+    container.innerHTML = plansArray.map(plan => `
         <div class="membership-card ${plan.recommended ? 'recommended' : ''}">
             <div class="membership-header">
                 <div class="card-icon" style="margin: 0 auto;">
                     <i class="${plan.icon || 'fas fa-star'}"></i>
                 </div>
                 <h3 class="membership-title">${plan.name}</h3>
-                <div class="membership-price">₹${plan.price}</div>
-                <div class="membership-period">${plan.period}</div>
+                <div class="membership-price">₹${plan.price || 'N/A'}</div>
+                <div class="membership-period">${plan.period || ''}</div>
                 ${plan.recommended ? `
-                    <p style="color: var(--success); font-weight: 600; font-size: 0.875rem; margin-top: 0.5rem;">
+                    <p style="color: #10b981; font-weight: 600; font-size: 0.875rem; margin-top: 0.5rem;">
                         Recommended!
                     </p>
                 ` : ''}
             </div>
 
             <ul class="membership-features">
-                ${plan.features.map(feature => `<li>${feature}</li>`).join('')}
+                ${(plan.features || []).map(feature => `<li>${feature}</li>`).join('')}
             </ul>
 
-            <button class="btn btn-primary subscribe-btn" data-plan="${id}" style="width: 100%;">
+            <button class="btn btn-primary subscribe-btn" data-plan="${plan.id}" style="width: 100%;">
                 <i class="fas fa-check-circle"></i> Subscribe Now
             </button>
         </div>
     `).join('');
 
-    // Re-attach event listeners after rendering
     attachSubscribeListeners();
 }
 
 function attachSubscribeListeners() {
     const subscribeButtons = document.querySelectorAll('.subscribe-btn');
-    const user = auth.currentUser;
-
     subscribeButtons.forEach(button => {
         button.addEventListener('click', async (e) => {
             e.preventDefault();
             const planType = button.dataset.plan;
 
-            if (!user) {
-                showNotification('Please login or register to subscribe', 'error');
-                setTimeout(() => {
-                    window.location.href = 'register.html';
-                }, 1500);
-                return;
-            }
-
             showLoading(button);
-
             const result = await subscribeMembership(planType);
-
             hideLoading(button);
 
             if (result.success) {
-                showNotification('Successfully subscribed to ' + membershipPlans[planType].name + '!', 'success');
+                showNotification('Successfully subscribed!', 'success');
                 button.textContent = 'Subscribed ✓';
                 button.disabled = true;
                 button.style.background = '#10b981';
             } else {
-                showNotification('Subscription failed. Please try again.', 'error');
+                showNotification(result.error || 'Subscription failed', 'error');
             }
         });
     });
@@ -201,10 +139,22 @@ function attachSubscribeListeners() {
 
 function updateSubscribeButtons(user) {
     const subscribeButtons = document.querySelectorAll('.subscribe-btn');
-
-    subscribeButtons.forEach(button => {
-        if (!user) {
+    if (!user) {
+        subscribeButtons.forEach(button => {
             button.innerHTML = '<i class="fas fa-user-plus"></i> Register to Subscribe';
-        }
+        });
+    }
+}
+
+// Initialize membership page
+export async function initMembershipsPage() {
+    console.log('initMembershipsPage: START');
+    const result = await fetchMembershipPlans();
+    if (result.success) {
+        renderMembershipPlans();
+    }
+
+    checkAuthState((user) => {
+        updateSubscribeButtons(user);
     });
 }

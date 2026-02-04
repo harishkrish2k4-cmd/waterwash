@@ -171,22 +171,42 @@ style.textContent = `
     }
   }
 `;
+
+// Help debug global errors
+window.onerror = function (msg, url, line, col, error) {
+    console.error('GLOBAL ERROR:', msg, 'at', url, ':', line, error);
+};
+
+window.onunhandledrejection = function (event) {
+    console.error('UNHANDLED PROMISE REJECTION:', event.reason);
+};
+
 document.head.appendChild(style);
 
 // --- Service Rendering ---
 
 export async function fetchServices() {
+    console.log('fetchServices: Starting...');
     try {
         const servicesRef = collection(db, 'services');
-        // Temporarily remove orderBy to rule out indexing issues on live site
-        const querySnapshot = await getDocs(servicesRef);
+
+        // Timeout
+        const timeout = new Promise((_, reject) =>
+            setTimeout(() => reject(new Error('Firestore Fetch Timeout (10s)')), 10000)
+        );
+
+        const fetchPromise = getDocs(servicesRef);
+
+        console.log('fetchServices: Waiting for getDocs...');
+        const querySnapshot = await Promise.race([fetchPromise, timeout]);
+        console.log('fetchServices: Success, items found:', querySnapshot.size);
 
         const services = [];
         querySnapshot.forEach((doc) => {
             services.push({ id: doc.id, ...doc.data() });
         });
 
-        // Sort manually by createdAt (fallback if missing)
+        // Sort manually
         services.sort((a, b) => {
             const dateA = a.createdAt?.seconds || 0;
             const dateB = b.createdAt?.seconds || 0;
@@ -195,17 +215,16 @@ export async function fetchServices() {
 
         return { success: true, services };
     } catch (error) {
-        console.error('Error fetching services:', error);
-        // Display error in the container so it's visible on live site
+        console.error('fetchServices: FAILED', error);
+
         const container = document.getElementById('servicesContainer');
         if (container) {
             container.innerHTML = `
-                <div class="text-center" style="grid-column: 1 / -1; padding: 2rem; color: #ef4444; background: rgba(239, 68, 68, 0.1); border-radius: 8px; border: 1px solid #ef4444;">
-                    <i class="fas fa-exclamation-circle" style="font-size: 2rem; margin-bottom: 1rem;"></i>
-                    <h3 style="color: #ef4444;">Unable to load services</h3>
-                    <p style="margin: 0.5rem 0;">${error.message}</p>
-                    <p style="font-size: 0.8rem; color: #666;">Check your Firestore security rules and configuration.</p>
-                    <button onclick="location.reload()" class="btn btn-secondary mt-2">Retry Loading</button>
+                <div class="text-center" style="grid-column: 1 / -1; padding: 2rem; color: #ef4444;">
+                    <i class="fas fa-exclamation-triangle" style="font-size: 2rem; margin-bottom: 1rem;"></i>
+                    <h3 style="color: #ef4444;">Error Loading Services</h3>
+                    <p>${error.message}</p>
+                    <button onclick="location.reload()" class="btn btn-secondary mt-2">Retry</button>
                 </div>
             `;
         }
@@ -218,7 +237,7 @@ export function renderServices(services) {
     if (!container) return;
 
     if (services.length === 0) {
-        container.innerHTML = '<p class="text-center" style="grid-column: 1 / -1; padding: 2rem;">No services available at the moment.</p>';
+        container.innerHTML = '<p class="text-center" style="grid-column: 1 / -1; padding: 2rem;">No services available.</p>';
         return;
     }
 
@@ -245,15 +264,13 @@ export function renderServices(services) {
 
 // Initialize home page services
 async function initHomePage() {
-    console.log('Initializing Home Page Services...');
+    console.log('initHomePage: START');
     const container = document.getElementById('servicesContainer');
     if (container) {
         const result = await fetchServices();
-        console.log('Fetch Services Result:', result);
+        console.log('initHomePage: Result received', result.success);
         if (result.success) {
             renderServices(result.services);
-        } else {
-            console.error('Failed to fetch services:', result.error);
         }
     }
 }
