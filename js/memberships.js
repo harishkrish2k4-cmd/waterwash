@@ -57,8 +57,10 @@ export async function subscribeMembership(planType) {
 
 // Initialize membership page
 export async function initMembershipsPage() {
+    console.log('Initializing Memberships Page...');
     // Fetch plans first
-    await fetchMembershipPlans();
+    const result = await fetchMembershipPlans();
+    console.log('Fetch Plans Result:', result);
 
     // Render plans if container exists
     renderMembershipPlans();

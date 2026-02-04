@@ -225,13 +225,22 @@ export function renderServices(services) {
 
 // Initialize home page services
 async function initHomePage() {
-    if (document.getElementById('servicesContainer')) {
+    console.log('Initializing Home Page Services...');
+    const container = document.getElementById('servicesContainer');
+    if (container) {
         const result = await fetchServices();
+        console.log('Fetch Services Result:', result);
         if (result.success) {
             renderServices(result.services);
+        } else {
+            console.error('Failed to fetch services:', result.error);
         }
     }
 }
 
 // Call init on load
-window.addEventListener('DOMContentLoaded', initHomePage);
+if (document.readyState === 'loading') {
+    window.addEventListener('DOMContentLoaded', initHomePage);
+} else {
+    initHomePage();
+}
