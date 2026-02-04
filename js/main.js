@@ -178,17 +178,37 @@ document.head.appendChild(style);
 export async function fetchServices() {
     try {
         const servicesRef = collection(db, 'services');
-        const q = query(servicesRef, orderBy('createdAt', 'asc'));
-        const querySnapshot = await getDocs(q);
+        // Temporarily remove orderBy to rule out indexing issues on live site
+        const querySnapshot = await getDocs(servicesRef);
 
         const services = [];
         querySnapshot.forEach((doc) => {
             services.push({ id: doc.id, ...doc.data() });
         });
 
+        // Sort manually by createdAt (fallback if missing)
+        services.sort((a, b) => {
+            const dateA = a.createdAt?.seconds || 0;
+            const dateB = b.createdAt?.seconds || 0;
+            return dateA - dateB;
+        });
+
         return { success: true, services };
     } catch (error) {
         console.error('Error fetching services:', error);
+        // Display error in the container so it's visible on live site
+        const container = document.getElementById('servicesContainer');
+        if (container) {
+            container.innerHTML = `
+                <div class="text-center" style="grid-column: 1 / -1; padding: 2rem; color: #ef4444; background: rgba(239, 68, 68, 0.1); border-radius: 8px; border: 1px solid #ef4444;">
+                    <i class="fas fa-exclamation-circle" style="font-size: 2rem; margin-bottom: 1rem;"></i>
+                    <h3 style="color: #ef4444;">Unable to load services</h3>
+                    <p style="margin: 0.5rem 0;">${error.message}</p>
+                    <p style="font-size: 0.8rem; color: #666;">Check your Firestore security rules and configuration.</p>
+                    <button onclick="location.reload()" class="btn btn-secondary mt-2">Retry Loading</button>
+                </div>
+            `;
+        }
         return { success: false, error: error.message };
     }
 }

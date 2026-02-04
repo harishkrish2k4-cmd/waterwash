@@ -12,18 +12,35 @@ export let membershipPlans = {};
 export async function fetchMembershipPlans() {
     try {
         const plansRef = collection(db, 'membershipPlans');
-        const q = query(plansRef, orderBy('price', 'asc'));
-        const querySnapshot = await getDocs(q);
+        // Temporarily remove orderBy to rule out indexing issues
+        const querySnapshot = await getDocs(plansRef);
 
         const plans = {};
         querySnapshot.forEach((doc) => {
             plans[doc.id] = doc.data();
         });
 
+        // Convert to array and sort manually by price
+        const plansArray = Object.entries(plans).map(([id, data]) => ({ id, ...data }));
+        plansArray.sort((a, b) => a.price - b.price);
+
+        // Re-construct the plans object in sorted order if needed, 
+        // but for membershipPlans variable we'll keep it as the plans object
         membershipPlans = plans;
         return { success: true, plans };
     } catch (error) {
         console.error('Error fetching membership plans:', error);
+        const container = document.getElementById('membershipPlansContainer');
+        if (container) {
+            container.innerHTML = `
+                <div class="text-center" style="grid-column: 1 / -1; padding: 2rem; color: #ef4444; background: rgba(239, 68, 68, 0.1); border-radius: 8px; border: 1px solid #ef4444;">
+                    <i class="fas fa-exclamation-circle" style="font-size: 2rem; margin-bottom: 1rem;"></i>
+                    <h3 style="color: #ef4444;">Unable to load plans</h3>
+                    <p style="margin: 0.5rem 0;">${error.message}</p>
+                    <button onclick="location.reload()" class="btn btn-secondary mt-2">Retry Loading</button>
+                </div>
+            `;
+        }
         return { success: false, error: error.message };
     }
 }
