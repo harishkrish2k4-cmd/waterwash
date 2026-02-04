@@ -62,92 +62,12 @@
     <section class="section" style="background: var(--light-gray); padding: 4rem 0;">
         <div class="container">
 
-            <div class="grid grid-3">
-
-                <!-- Monthly Plan -->
-                <div class="membership-card">
-                    <div class="membership-header">
-                        <div class="card-icon" style="margin: 0 auto;">
-                            <i class="fas fa-calendar-alt"></i>
-                        </div>
-                        <h3 class="membership-title">Monthly Membership</h3>
-                        <div class="membership-price">$29</div>
-                        <div class="membership-period">per month</div>
-                    </div>
-
-                    <ul class="membership-features">
-                        <li>Basic vehicle servicing</li>
-                        <li>Oil change included</li>
-                        <li>Emergency roadside assistance</li>
-                        <li>Priority booking</li>
-                        <li>Free vehicle wash</li>
-                        <li>10% discount on parts</li>
-                    </ul>
-
-                    <button class="btn btn-primary subscribe-btn" data-plan="monthly" style="width: 100%;">
-                        <i class="fas fa-check-circle"></i> Subscribe Now
-                    </button>
+            <div id="membershipPlansContainer" class="grid grid-3">
+                <!-- Plans will be rendered here dynamically -->
+                <div class="text-center" style="grid-column: 1 / -1; padding: 3rem;">
+                    <i class="fas fa-spinner fa-spin" style="font-size: 2rem; color: var(--primary-blue);"></i>
+                    <p style="margin-top: 1rem; color: var(--gray);">Loading membership plans...</p>
                 </div>
-
-                <!-- Half-Yearly Plan (Recommended) -->
-                <div class="membership-card recommended">
-                    <div class="membership-header">
-                        <div class="card-icon" style="margin: 0 auto;">
-                            <i class="fas fa-star"></i>
-                        </div>
-                        <h3 class="membership-title">Half-Yearly Membership</h3>
-                        <div class="membership-price">$149</div>
-                        <div class="membership-period">per 6 months</div>
-                        <p style="color: var(--success); font-weight: 600; font-size: 0.875rem; margin-top: 0.5rem;">
-                            Save $25 compared to monthly!
-                        </p>
-                    </div>
-
-                    <ul class="membership-features">
-                        <li>All monthly benefits</li>
-                        <li>Free tire rotation</li>
-                        <li>Battery check & service</li>
-                        <li>AC system inspection</li>
-                        <li>Priority service</li>
-                        <li>15% discount on parts</li>
-                        <li>Free towing service</li>
-                    </ul>
-
-                    <button class="btn btn-primary subscribe-btn" data-plan="halfYearly" style="width: 100%;">
-                        <i class="fas fa-check-circle"></i> Subscribe Now
-                    </button>
-                </div>
-
-                <!-- Yearly Plan -->
-                <div class="membership-card">
-                    <div class="membership-header">
-                        <div class="card-icon" style="margin: 0 auto;">
-                            <i class="fas fa-crown"></i>
-                        </div>
-                        <h3 class="membership-title">Yearly Membership</h3>
-                        <div class="membership-price">$269</div>
-                        <div class="membership-period">per year</div>
-                        <p style="color: var(--success); font-weight: 600; font-size: 0.875rem; margin-top: 0.5rem;">
-                            Save $79 - Best Value!
-                        </p>
-                    </div>
-
-                    <ul class="membership-features">
-                        <li>All half-yearly benefits</li>
-                        <li>Full vehicle maintenance</li>
-                        <li>Free comprehensive inspections</li>
-                        <li>Brake system service</li>
-                        <li>Premium 24/7 support</li>
-                        <li>20% discount on parts</li>
-                        <li>Free pickup & delivery</li>
-                        <li>Complimentary detailing</li>
-                    </ul>
-
-                    <button class="btn btn-primary subscribe-btn" data-plan="yearly" style="width: 100%;">
-                        <i class="fas fa-check-circle"></i> Subscribe Now
-                    </button>
-                </div>
-
             </div>
 
         </div>

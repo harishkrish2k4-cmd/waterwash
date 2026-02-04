@@ -6,9 +6,12 @@ import {
     getDocs,
     doc,
     updateDoc,
+    setDoc,
+    deleteDoc,
     query,
     orderBy,
-    where
+    where,
+    serverTimestamp
 } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 import { showNotification } from './main.js';
 
@@ -161,6 +164,102 @@ export function exportUsersToCSV(users) {
     } catch (error) {
         console.error('Error exporting users:', error);
         showNotification('Failed to export users', 'error');
+        return { success: false, error: error.message };
+    }
+}
+
+// --- Service Management ---
+
+export async function getServices() {
+    try {
+        const servicesRef = collection(db, 'services');
+        const q = query(servicesRef, orderBy('createdAt', 'desc'));
+        const querySnapshot = await getDocs(q);
+
+        const services = [];
+        querySnapshot.forEach((doc) => {
+            services.push({ id: doc.id, ...doc.data() });
+        });
+
+        return { success: true, services };
+    } catch (error) {
+        console.error('Error fetching services:', error);
+        return { success: false, error: error.message };
+    }
+}
+
+export async function saveService(serviceData, serviceId = null) {
+    try {
+        const id = serviceId || serviceData.name.toLowerCase().replace(/\s+/g, '-');
+        const serviceRef = doc(db, 'services', id);
+
+        await setDoc(serviceRef, {
+            ...serviceData,
+            updatedAt: serverTimestamp(),
+            createdAt: serviceId ? serviceData.createdAt : serverTimestamp()
+        }, { merge: true });
+
+        return { success: true, id };
+    } catch (error) {
+        console.error('Error saving service:', error);
+        return { success: false, error: error.message };
+    }
+}
+
+export async function deleteService(serviceId) {
+    try {
+        await deleteDoc(doc(db, 'services', serviceId));
+        return { success: true };
+    } catch (error) {
+        console.error('Error deleting service:', error);
+        return { success: false, error: error.message };
+    }
+}
+
+// --- Membership Plan Management ---
+
+export async function getMembershipPlans() {
+    try {
+        const plansRef = collection(db, 'membershipPlans');
+        const q = query(plansRef, orderBy('price', 'asc'));
+        const querySnapshot = await getDocs(q);
+
+        const plans = [];
+        querySnapshot.forEach((doc) => {
+            plans.push({ id: doc.id, ...doc.data() });
+        });
+
+        return { success: true, plans };
+    } catch (error) {
+        console.error('Error fetching membership plans:', error);
+        return { success: false, error: error.message };
+    }
+}
+
+export async function saveMembershipPlan(planData, planId = null) {
+    try {
+        const id = planId || planData.name.toLowerCase().replace(/\s+/g, '-');
+        const planRef = doc(db, 'membershipPlans', id);
+
+        await setDoc(planRef, {
+            ...planData,
+            updatedAt: serverTimestamp(),
+            createdAt: planId ? planData.createdAt : serverTimestamp()
+        }, { merge: true });
+
+        return { success: true, id };
+    } catch (error) {
+        console.error('Error saving membership plan:', error);
+        return { success: false, error: error.message };
+    }
+}
+
+export async function deleteMembershipPlan(planId) {
+    try {
+        await deleteDoc(doc(db, 'membershipPlans', planId));
+        return { success: true };
+    } catch (error) {
+        console.error('Error deleting membership plan:', error);
         return { success: false, error: error.message };
     }
 }

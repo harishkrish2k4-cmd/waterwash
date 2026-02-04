@@ -1,4 +1,6 @@
 // Main JavaScript - General Utilities
+import { db } from './firebase-config.js';
+import { collection, getDocs, query, orderBy } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 
 // Smooth scrolling for navigation links
 document.addEventListener('DOMContentLoaded', () => {
@@ -170,3 +172,66 @@ style.textContent = `
   }
 `;
 document.head.appendChild(style);
+
+// --- Service Rendering ---
+
+export async function fetchServices() {
+    try {
+        const servicesRef = collection(db, 'services');
+        const q = query(servicesRef, orderBy('createdAt', 'asc'));
+        const querySnapshot = await getDocs(q);
+
+        const services = [];
+        querySnapshot.forEach((doc) => {
+            services.push({ id: doc.id, ...doc.data() });
+        });
+
+        return { success: true, services };
+    } catch (error) {
+        console.error('Error fetching services:', error);
+        return { success: false, error: error.message };
+    }
+}
+
+export function renderServices(services) {
+    const container = document.getElementById('servicesContainer');
+    if (!container) return;
+
+    if (services.length === 0) {
+        container.innerHTML = '<p class="text-center" style="grid-column: 1 / -1; padding: 2rem;">No services available at the moment.</p>';
+        return;
+    }
+
+    container.innerHTML = services.map(service => `
+        <div class="card text-center" style="background: ${service.gradient || 'var(--primary-blue)'}; color: white; border: none;">
+            <div class="card-icon" style="margin: 0 auto; background: rgba(255, 255, 255, 0.2); color: white;">
+                <i class="${service.icon || 'fas fa-car'}"></i>
+            </div>
+            <h4 class="card-title" style="color: white; font-size: 1.5rem; margin-top: 1rem;">${service.name}</h4>
+            <div style="font-size: 3rem; font-weight: 700; margin: 1rem 0;">
+                ₹${service.price}
+            </div>
+            <p class="card-text" style="color: rgba(255, 255, 255, 0.9); font-size: 1rem;">${service.description}</p>
+            <ul style="list-style: none; padding: 0; margin-top: 1.5rem; text-align: left;">
+                ${(service.features || []).map(feature => `
+                    <li style="padding: 0.5rem 0; color: rgba(255, 255, 255, 0.9);">
+                        <i class="fas fa-check" style="color: #4ade80; margin-right: 0.5rem;"></i> ${feature}
+                    </li>
+                `).join('')}
+            </ul>
+        </div>
+    `).join('');
+}
+
+// Initialize home page services
+async function initHomePage() {
+    if (document.getElementById('servicesContainer')) {
+        const result = await fetchServices();
+        if (result.success) {
+            renderServices(result.services);
+        }
+    }
+}
+
+// Call init on load
+window.addEventListener('DOMContentLoaded', initHomePage);

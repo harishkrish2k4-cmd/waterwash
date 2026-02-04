@@ -32,8 +32,9 @@
             </a>
 
             <ul class="navbar-menu">
-                <li><a href="dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-                <li><a href="../index.html"><i class="fas fa-home"></i> Main Site</a></li>
+                <li><a href="#" class="nav-tab active" data-tab="users"><i class="fas fa-users"></i> Users</a></li>
+                <li><a href="#" class="nav-tab" data-tab="services"><i class="fas fa-tools"></i> Services</a></li>
+                <li><a href="#" class="nav-tab" data-tab="memberships"><i class="fas fa-star"></i> Memberships</a></li>
                 <li><a href="#" id="adminLogoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
             </ul>
         </div>
@@ -50,195 +51,350 @@
             </div>
 
             <!-- Statistics Cards -->
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-icon" style="background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);">
-                        <i class="fas fa-users"></i>
+            <!-- Users Tab -->
+            <div id="usersTab" class="tab-content active">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="totalUsers">0</h3>
+                            <p>Total Users</p>
+                        </div>
                     </div>
-                    <div class="stat-info">
-                        <h3 id="totalUsers">0</h3>
-                        <p>Total Users</p>
+
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: linear-gradient(135deg, #10b981 0%, #34d399 100%);">
+                            <i class="fas fa-user-check"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="activeMembers">0</h3>
+                            <p>Active Members</p>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);">
+                            <i class="fas fa-crown"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="yearlyMembers">0</h3>
+                            <p>Yearly Members</p>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%);">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="activeAccounts">0</h3>
+                            <p>Active Accounts</p>
+                        </div>
                     </div>
                 </div>
 
-                <div class="stat-card">
-                    <div class="stat-icon" style="background: linear-gradient(135deg, #10b981 0%, #34d399 100%);">
-                        <i class="fas fa-user-check"></i>
+                <!-- User Management Table -->
+                <div class="data-table">
+                    <div class="table-header">
+                        <h3 style="margin: 0;"><i class="fas fa-users-cog"></i> User Management</h3>
+                        <div class="search-box">
+                            <input type="text" id="searchInput" placeholder="Search users..." style="width: 250px;">
+                            <select id="membershipFilter" class="form-input"
+                                style="width: 150px; padding: 0.625rem 1rem;">
+                                <option value="all">All Memberships</option>
+                                <option value="monthly">Monthly</option>
+                                <option value="halfYearly">Half-Yearly</option>
+                                <option value="yearly">Yearly</option>
+                            </select>
+                            <select id="statusFilter" class="form-input" style="width: 150px; padding: 0.625rem 1rem;">
+                                <option value="all">All Status</option>
+                                <option value="active">Active</option>
+                                <option value="inactive">Inactive</option>
+                            </select>
+                            <button class="btn btn-primary btn-small" id="exportBtn">
+                                <i class="fas fa-download"></i> Export CSV
+                            </button>
+                        </div>
                     </div>
-                    <div class="stat-info">
-                        <h3 id="activeMembers">0</h3>
-                        <p>Active Members</p>
+
+                    <div style="overflow-x: auto;">
+                        <table id="usersTable">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                    <th>Membership</th>
+                                    <th>Status</th>
+                                    <th>Account</th>
+                                    <th>Joined</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="usersTableBody">
+                                <tr>
+                                    <td colspan="8" style="text-align: center; padding: 3rem;">
+                                        <i class="fas fa-spinner fa-spin"
+                                            style="font-size: 2rem; color: var(--primary-blue);"></i>
+                                        <p style="margin-top: 1rem; color: var(--gray);">Loading users...</p>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
 
-                <div class="stat-card">
-                    <div class="stat-icon" style="background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);">
-                        <i class="fas fa-crown"></i>
-                    </div>
-                    <div class="stat-info">
-                        <h3 id="yearlyMembers">0</h3>
-                        <p>Yearly Members</p>
-                    </div>
-                </div>
+            </div>
+        </div>
 
-                <div class="stat-card">
-                    <div class="stat-icon" style="background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%);">
-                        <i class="fas fa-chart-line"></i>
-                    </div>
-                    <div class="stat-info">
-                        <h3 id="activeAccounts">0</h3>
-                        <p>Active Accounts</p>
-                    </div>
+        <!-- Services Tab -->
+        <div id="servicesTab" class="tab-content" style="display: none;">
+            <div class="card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                    <h2><i class="fas fa-tools"></i> Manage Services</h2>
+                    <button class="btn btn-primary" id="addServiceBtn">
+                        <i class="fas fa-plus"></i> Add New Service
+                    </button>
+                </div>
+                <div id="servicesList" class="grid grid-2">
+                    <!-- Loaded dynamically -->
                 </div>
             </div>
+        </div>
 
-            <!-- User Management Table -->
-            <div class="data-table">
-                <div class="table-header">
-                    <h3 style="margin: 0;"><i class="fas fa-users-cog"></i> User Management</h3>
-                    <div class="search-box">
-                        <input type="text" id="searchInput" placeholder="Search users..." style="width: 250px;">
-                        <select id="membershipFilter" class="form-input" style="width: 150px; padding: 0.625rem 1rem;">
-                            <option value="all">All Memberships</option>
-                            <option value="monthly">Monthly</option>
-                            <option value="halfYearly">Half-Yearly</option>
-                            <option value="yearly">Yearly</option>
-                        </select>
-                        <select id="statusFilter" class="form-input" style="width: 150px; padding: 0.625rem 1rem;">
-                            <option value="all">All Status</option>
-                            <option value="active">Active</option>
-                            <option value="inactive">Inactive</option>
-                        </select>
-                        <button class="btn btn-primary btn-small" id="exportBtn">
-                            <i class="fas fa-download"></i> Export CSV
+        <!-- Memberships Tab -->
+        <div id="membershipsTab" class="tab-content" style="display: none;">
+            <div class="card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                    <h2><i class="fas fa-star"></i> Manage Membership Plans</h2>
+                    <button class="btn btn-primary" id="addPlanBtn">
+                        <i class="fas fa-plus"></i> Add New Plan
+                    </button>
+                </div>
+                <div id="plansList" class="grid grid-3">
+                    <!-- Loaded dynamically -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Edit User Modal (Simple) -->
+        <div id="editModal" class="hidden"
+            style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.7); z-index: 9999; display: none; align-items: center; justify-content: center; padding: 2rem;">
+            <div class="card" style="max-width: 500px; width: 100%; padding: 2rem;" onclick="event.stopPropagation();">
+                <h3 style="margin-bottom: 1.5rem;">Edit User</h3>
+
+                <div class="form-group">
+                    <label class="form-label">Membership Plan</label>
+                    <select id="editMembershipPlan" class="form-input">
+                        <option value="">None</option>
+                        <option value="monthly">Monthly</option>
+                        <option value="halfYearly">Half-Yearly</option>
+                        <option value="yearly">Yearly</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Account Status</label>
+                    <select id="editAccountStatus" class="form-input">
+                        <option value="active">Active</option>
+                        <option value="inactive">Inactive</option>
+                    </select>
+                </div>
+
+                <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
+                    <button class="btn btn-primary" id="saveUserBtn" style="flex: 1;">
+                        <i class="fas fa-save"></i> Save Changes
+                    </button>
+                    <button class="btn btn-secondary" id="cancelEditBtn" style="flex: 1;">
+                        Cancel
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Service Modal -->
+        <div id="serviceModal" class="hidden"
+            style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.7); z-index: 9999; display: none; align-items: center; justify-content: center; padding: 2rem;">
+            <div class="card" style="max-width: 600px; width: 100%; padding: 2rem; max-height: 90vh; overflow-y: auto;"
+                onclick="event.stopPropagation();">
+                <h3 id="serviceModalTitle" style="margin-bottom: 1.5rem;">Add New Service</h3>
+                <form id="serviceForm">
+                    <input type="hidden" id="serviceId">
+                    <div class="form-group">
+                        <label class="form-label">Service Name</label>
+                        <input type="text" id="serviceName" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Price (₹)</label>
+                        <input type="number" id="servicePrice" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Description</label>
+                        <textarea id="serviceDesc" class="form-input" rows="3" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Icon Class (e.g., fas fa-car)</label>
+                        <input type="text" id="serviceIcon" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Gradient Background (CSS)</label>
+                        <input type="text" id="serviceGradient" class="form-input" placeholder="linear-gradient(...)">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Features (one per line)</label>
+                        <textarea id="serviceFeatures" class="form-input" rows="4"></textarea>
+                    </div>
+                    <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
+                        <button type="submit" class="btn btn-primary" style="flex: 1;">
+                            <i class="fas fa-save"></i> Save Service
                         </button>
+                        <button type="button" class="btn btn-secondary" id="cancelServiceBtn"
+                            style="flex: 1;">Cancel</button>
                     </div>
-                </div>
-
-                <div style="overflow-x: auto;">
-                    <table id="usersTable">
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Email</th>
-                                <th>Phone</th>
-                                <th>Membership</th>
-                                <th>Status</th>
-                                <th>Account</th>
-                                <th>Joined</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="usersTableBody">
-                            <tr>
-                                <td colspan="8" style="text-align: center; padding: 3rem;">
-                                    <i class="fas fa-spinner fa-spin"
-                                        style="font-size: 2rem; color: var(--primary-blue);"></i>
-                                    <p style="margin-top: 1rem; color: var(--gray);">Loading users...</p>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-        </div>
-    </div>
-
-    <!-- Edit User Modal (Simple) -->
-    <div id="editModal" class="hidden"
-        style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.7); z-index: 9999; display: none; align-items: center; justify-content: center; padding: 2rem;">
-        <div class="card" style="max-width: 500px; width: 100%; padding: 2rem;" onclick="event.stopPropagation();">
-            <h3 style="margin-bottom: 1.5rem;">Edit User</h3>
-
-            <div class="form-group">
-                <label class="form-label">Membership Plan</label>
-                <select id="editMembershipPlan" class="form-input">
-                    <option value="">None</option>
-                    <option value="monthly">Monthly</option>
-                    <option value="halfYearly">Half-Yearly</option>
-                    <option value="yearly">Yearly</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label class="form-label">Account Status</label>
-                <select id="editAccountStatus" class="form-input">
-                    <option value="active">Active</option>
-                    <option value="inactive">Inactive</option>
-                </select>
-            </div>
-
-            <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
-                <button class="btn btn-primary" id="saveUserBtn" style="flex: 1;">
-                    <i class="fas fa-save"></i> Save Changes
-                </button>
-                <button class="btn btn-secondary" id="cancelEditBtn" style="flex: 1;">
-                    Cancel
-                </button>
+                </form>
             </div>
         </div>
-    </div>
 
-    <!-- JavaScript -->
-    <script src="../js/main.js" type="module"></script>
-    <script type="module">
-        import { protectAdminPage, adminLogout, checkAdminAuthState } from '../js/admin-auth.js';
-        import {
-            getAllUsers,
-            getUserStatistics,
-            updateUserMembership,
-            updateUserAccountStatus,
-            searchUsers,
-            filterUsersByMembership,
-            filterUsersByAccountStatus,
-            exportUsersToCSV,
-            formatDate,
-            formatMembershipPlan
-        } from '../js/admin-dashboard.js';
-        import { showNotification, showLoading, hideLoading } from '../js/main.js';
+        <!-- Membership Modal -->
+        <div id="planModal" class="hidden"
+            style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.7); z-index: 9999; display: none; align-items: center; justify-content: center; padding: 2rem;">
+            <div class="card" style="max-width: 600px; width: 100%; padding: 2rem; max-height: 90vh; overflow-y: auto;"
+                onclick="event.stopPropagation();">
+                <h3 id="planModalTitle" style="margin-bottom: 1.5rem;">Add Membership Plan</h3>
+                <form id="planForm">
+                    <input type="hidden" id="planId">
+                    <div class="form-group">
+                        <label class="form-label">Plan Name</label>
+                        <input type="text" id="planName" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Price (₹)</label>
+                        <input type="number" id="planPrice" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Period (e.g., per month)</label>
+                        <input type="text" id="planPeriod" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Recommended?</label>
+                        <select id="planRecommended" class="form-input">
+                            <option value="false">No</option>
+                            <option value="true">Yes</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Features (one per line)</label>
+                        <textarea id="planFeatures" class="form-input" rows="6"></textarea>
+                    </div>
+                    <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
+                        <button type="submit" class="btn btn-primary" style="flex: 1;">
+                            <i class="fas fa-save"></i> Save Plan
+                        </button>
+                        <button type="button" class="btn btn-secondary" id="cancelPlanBtn"
+                            style="flex: 1;">Cancel</button>
+                    </div>
+                </form>
+            </div>
 
-        // Protect this page
-        protectAdminPage();
+            <!-- JavaScript -->
+            <script src="../js/main.js" type="module"></script>
+            <script type="module">
+                import { protectAdminPage, adminLogout, checkAdminAuthState } from '../js/admin-auth.js';
+                import {
+                    getAllUsers,
+                    getUserStatistics,
+                    updateUserMembership,
+                    updateUserAccountStatus,
+                    searchUsers,
+                    filterUsersByMembership,
+                    filterUsersByAccountStatus,
+                    exportUsersToCSV,
+                    formatDate,
+                    formatMembershipPlan,
+                    getServices,
+                    saveService,
+                    deleteService,
+                    getMembershipPlans,
+                    saveMembershipPlan,
+                    deleteMembershipPlan
+                } from '../js/admin-dashboard.js';
+                import { showNotification, showLoading, hideLoading } from '../js/main.js';
 
-        let allUsers = [];
-        let filteredUsers = [];
-        let currentEditUserId = null;
+                // Protect this page
+                protectAdminPage();
 
-        // Load dashboard data
-        async function loadDashboard() {
-            // Get users
-            const usersResult = await getAllUsers();
+                let allUsers = [];
+                let filteredUsers = [];
+                let currentEditUserId = null;
+                let allServices = [];
+                let allPlans = [];
 
-            if (!usersResult.success) {
-                showNotification('Failed to load users: ' + usersResult.error, 'error');
-                return;
-            }
+                // Load dashboard data
+                async function loadDashboard() {
+                    // Get users
+                    const usersResult = await getAllUsers();
 
-            allUsers = usersResult.users;
-            filteredUsers = allUsers;
+                    if (!usersResult.success) {
+                        showNotification('Failed to load users: ' + usersResult.error, 'error');
+                        return;
+                    }
 
-            // Get statistics
-            const statsResult = await getUserStatistics();
+                    allUsers = usersResult.users;
+                    filteredUsers = allUsers;
 
-            if (statsResult.success) {
-                const stats = statsResult.stats;
-                document.getElementById('totalUsers').textContent = stats.totalUsers;
-                document.getElementById('activeMembers').textContent = stats.activeMembers;
-                document.getElementById('yearlyMembers').textContent = stats.yearlyMembers;
-                document.getElementById('activeAccounts').textContent = stats.activeAccounts;
-            }
+                    // Get statistics
+                    const statsResult = await getUserStatistics();
 
-            // Render users table
-            renderUsersTable(filteredUsers);
-        }
+                    if (statsResult.success) {
+                        const stats = statsResult.stats;
+                        document.getElementById('totalUsers').textContent = stats.totalUsers;
+                        document.getElementById('activeMembers').textContent = stats.activeMembers;
+                        document.getElementById('yearlyMembers').textContent = stats.yearlyMembers;
+                        document.getElementById('activeAccounts').textContent = stats.activeAccounts;
+                    }
 
-        // Render users table
-        function renderUsersTable(users) {
-            const tbody = document.getElementById('usersTableBody');
+                    // Render users table
+                    renderUsersTable(filteredUsers);
 
-            if (users.length === 0) {
-                tbody.innerHTML = `
+                    // Load services & plans
+                    loadServices();
+                    loadPlans();
+                }
+
+                // --- Tab Management ---
+                const tabs = document.querySelectorAll('.nav-tab');
+                const tabContents = document.querySelectorAll('.tab-content');
+
+                tabs.forEach(tab => {
+                    tab.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        const targetTab = tab.dataset.tab;
+
+                        // Update active state
+                        tabs.forEach(t => t.classList.remove('active'));
+                        tab.classList.add('active');
+
+                        // Show/hide content
+                        tabContents.forEach(content => {
+                            if (content.id === `${targetTab}Tab`) {
+                                content.style.display = 'block';
+                                content.classList.add('active');
+                            } else {
+                                content.style.display = 'none';
+                                content.classList.remove('active');
+                            }
+                        });
+                    });
+                });
+
+                // Render users table
+                function renderUsersTable(users) {
+                    const tbody = document.getElementById('usersTableBody');
+
+                    if (users.length === 0) {
+                        tbody.innerHTML = `
           <tr>
             <td colspan="8" style="text-align: center; padding: 3rem; color: var(--gray);">
               <i class="fas fa-users" style="font-size: 2rem; opacity: 0.3;"></i>
@@ -246,10 +402,10 @@
             </td>
           </tr>
         `;
-                return;
-            }
+                        return;
+                    }
 
-            tbody.innerHTML = users.map(user => `
+                    tbody.innerHTML = users.map(user => `
         <tr>
           <td><strong>${user.fullName || 'N/A'}</strong></td>
           <td>${user.email || 'N/A'}</td>
@@ -277,134 +433,323 @@
           </td>
         </tr>
       `).join('');
-        }
+                }
 
-        // Edit user
-        window.editUser = function (userId) {
-            const user = allUsers.find(u => u.id === userId);
-            if (!user) return;
+                // Edit user
+                window.editUser = function (userId) {
+                    const user = allUsers.find(u => u.id === userId);
+                    if (!user) return;
 
-            currentEditUserId = userId;
-            document.getElementById('editMembershipPlan').value = user.membershipPlan || '';
-            document.getElementById('editAccountStatus').value = user.accountStatus || 'active';
-            const modal = document.getElementById('editModal');
-            modal.classList.remove('hidden');
-            modal.style.display = 'flex';
-        };
+                    currentEditUserId = userId;
+                    document.getElementById('editMembershipPlan').value = user.membershipPlan || '';
+                    document.getElementById('editAccountStatus').value = user.accountStatus || 'active';
+                    const modal = document.getElementById('editModal');
+                    modal.classList.remove('hidden');
+                    modal.style.display = 'flex';
+                };
 
-        // Save user changes
-        document.getElementById('saveUserBtn').addEventListener('click', async () => {
-            if (!currentEditUserId) return;
+                // Save user changes
+                document.getElementById('saveUserBtn').addEventListener('click', async () => {
+                    if (!currentEditUserId) return;
 
-            const membershipPlan = document.getElementById('editMembershipPlan').value;
-            const accountStatus = document.getElementById('editAccountStatus').value;
+                    const membershipPlan = document.getElementById('editMembershipPlan').value;
+                    const accountStatus = document.getElementById('editAccountStatus').value;
 
-            const saveBtn = document.getElementById('saveUserBtn');
-            showLoading(saveBtn);
+                    const saveBtn = document.getElementById('saveUserBtn');
+                    showLoading(saveBtn);
 
-            // Update membership
-            const membershipResult = await updateUserMembership(currentEditUserId, membershipPlan || null);
+                    // Update membership
+                    const membershipResult = await updateUserMembership(currentEditUserId, membershipPlan || null);
 
-            // Update account status
-            const statusResult = await updateUserAccountStatus(currentEditUserId, accountStatus);
+                    // Update account status
+                    const statusResult = await updateUserAccountStatus(currentEditUserId, accountStatus);
 
-            hideLoading(saveBtn);
+                    hideLoading(saveBtn);
 
-            if (membershipResult.success && statusResult.success) {
-                showNotification('User updated successfully!', 'success');
-                const modal = document.getElementById('editModal');
-                modal.classList.add('hidden');
-                modal.style.display = 'none';
-                currentEditUserId = null;
+                    if (membershipResult.success && statusResult.success) {
+                        showNotification('User updated successfully!', 'success');
+                        const modal = document.getElementById('editModal');
+                        modal.classList.add('hidden');
+                        modal.style.display = 'none';
+                        currentEditUserId = null;
+                        loadDashboard();
+                    } else {
+                        showNotification('Failed to update user', 'error');
+                    }
+                });
+
+                // Cancel edit
+                document.getElementById('cancelEditBtn').addEventListener('click', () => {
+                    const modal = document.getElementById('editModal');
+                    modal.classList.add('hidden');
+                    modal.style.display = 'none';
+                    currentEditUserId = null;
+                });
+
+                // Close modal when clicking outside
+                document.getElementById('editModal').addEventListener('click', (e) => {
+                    if (e.target.id === 'editModal') {
+                        const modal = document.getElementById('editModal');
+                        modal.classList.add('hidden');
+                        modal.style.display = 'none';
+                        currentEditUserId = null;
+                    }
+                });
+
+                // Search functionality
+                document.getElementById('searchInput').addEventListener('input', (e) => {
+                    applyFilters();
+                });
+
+                // Membership filter
+                document.getElementById('membershipFilter').addEventListener('change', () => {
+                    applyFilters();
+                });
+
+                // Status filter
+                document.getElementById('statusFilter').addEventListener('change', () => {
+                    applyFilters();
+                });
+
+                // Apply all filters
+                function applyFilters() {
+                    const searchTerm = document.getElementById('searchInput').value;
+                    const membershipFilter = document.getElementById('membershipFilter').value;
+                    const statusFilter = document.getElementById('statusFilter').value;
+
+                    let filtered = allUsers;
+
+                    // Apply search
+                    filtered = searchUsers(filtered, searchTerm);
+
+                    // Apply membership filter
+                    filtered = filterUsersByMembership(filtered, membershipFilter);
+
+                    // Apply status filter
+                    filtered = filterUsersByAccountStatus(filtered, statusFilter);
+
+                    filteredUsers = filtered;
+                    renderUsersTable(filteredUsers);
+                }
+
+                // Export to CSV
+                document.getElementById('exportBtn').addEventListener('click', () => {
+                    exportUsersToCSV(filteredUsers);
+                });
+
+                // Logout
+                document.getElementById('adminLogoutBtn').addEventListener('click', async (e) => {
+                    e.preventDefault();
+
+                    const result = await adminLogout();
+
+                    if (result.success) {
+                        showNotification('Logged out successfully', 'success');
+                        setTimeout(() => {
+                            window.location.href = 'login.html';
+                        }, 1000);
+                    }
+                });
+
+                // Set admin name
+                checkAdminAuthState((user, isAdmin) => {
+                    if (user && isAdmin) {
+                        document.getElementById('adminName').textContent = user.email.split('@')[0];
+                    }
+                });
+
+                // --- Service Management ---
+                async function loadServices() {
+                    const result = await getServices();
+                    if (result.success) {
+                        allServices = result.services;
+                        renderServicesGrid(allServices);
+                    }
+                }
+
+                function renderServicesGrid(services) {
+                    const list = document.getElementById('servicesList');
+                    if (!list) return;
+                    list.innerHTML = services.map(s => `
+                        <div class="card" style="border: 1px solid #eee; padding: 1.5rem; margin-bottom: 1rem;">
+                            <div style="display: flex; gap: 1rem; align-items: center;">
+                                <div style="width: 50px; height: 50px; background: ${s.gradient || 'var(--primary-blue)'}; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white;">
+                                    <i class="${s.icon || 'fas fa-tools'}"></i>
+                                </div>
+                                <div style="flex: 1;">
+                                    <h4 style="margin: 0;">${s.name} (₹${s.price})</h4>
+                                    <p style="font-size: 0.8rem; color: #666; margin: 0.2rem 0;">${s.description}</p>
+                                </div>
+                                <div style="display: flex; gap: 0.5rem;">
+                                    <button class="btn btn-small" onclick="window.editService('${s.id}')"><i class="fas fa-edit"></i> Edit</button>
+                                    <button class="btn btn-secondary btn-small" onclick="window.deleteServiceEntry('${s.id}')"><i class="fas fa-trash"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    `).join('');
+                }
+
+                document.getElementById('addServiceBtn')?.addEventListener('click', () => {
+                    document.getElementById('serviceForm').reset();
+                    document.getElementById('serviceId').value = '';
+                    document.getElementById('serviceModalTitle').textContent = 'Add New Service';
+                    openModal('serviceModal');
+                });
+
+                window.editService = (id) => {
+                    const s = allServices.find(item => item.id === id);
+                    if (!s) return;
+                    document.getElementById('serviceId').value = s.id;
+                    document.getElementById('serviceName').value = s.name;
+                    document.getElementById('servicePrice').value = s.price;
+                    document.getElementById('serviceDesc').value = s.description;
+                    document.getElementById('serviceIcon').value = s.icon;
+                    document.getElementById('serviceGradient').value = s.gradient || '';
+                    document.getElementById('serviceFeatures').value = (s.features || []).join('\n');
+                    document.getElementById('serviceModalTitle').textContent = 'Edit Service';
+                    openModal('serviceModal');
+                };
+
+                document.getElementById('serviceForm')?.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    const id = document.getElementById('serviceId').value;
+                    const data = {
+                        name: document.getElementById('serviceName').value,
+                        price: parseInt(document.getElementById('servicePrice').value),
+                        description: document.getElementById('serviceDesc').value,
+                        icon: document.getElementById('serviceIcon').value,
+                        gradient: document.getElementById('serviceGradient').value,
+                        features: document.getElementById('serviceFeatures').value.split('\n').filter(f => f.trim())
+                    };
+                    const btn = e.target.querySelector('button[type="submit"]');
+                    showLoading(btn);
+                    const result = await saveService(data, id || null);
+                    hideLoading(btn);
+                    if (result.success) {
+                        showNotification('Service saved!', 'success');
+                        closeModal('serviceModal');
+                        loadServices();
+                    }
+                };
+
+                window.deleteServiceEntry = async (id) => {
+                    if (confirm('Are you sure you want to delete this service?')) {
+                        await deleteService(id);
+                        showNotification('Service deleted', 'success');
+                        loadServices();
+                    }
+                };
+
+                // --- Membership Plan Management ---
+                async function loadPlans() {
+                    const result = await getMembershipPlans();
+                    if (result.success) {
+                        allPlans = result.plans;
+                        renderPlansGrid(allPlans);
+                    }
+                }
+
+                function renderPlansGrid(plans) {
+                    const list = document.getElementById('plansList');
+                    if (!list) return;
+                    list.innerHTML = plans.map(p => `
+                        <div class="card" style="border: 1px solid #eee; border-top: 4px solid var(--primary-blue); padding: 1.5rem;">
+                            <div style="display: flex; justify-content: space-between; align-items: start;">
+                                <h4 style="margin: 0;">${p.name}</h4>
+                                <div style="display: flex; gap: 0.5rem;">
+                                    <button class="btn btn-small" onclick="window.editPlan('${p.id}')"><i class="fas fa-edit"></i> Edit</button>
+                                    <button class="btn btn-secondary btn-small" onclick="window.deletePlanEntry('${p.id}')"><i class="fas fa-trash"></i></button>
+                                </div>
+                            </div>
+                            <div style="font-size: 1.5rem; font-weight: 700; margin: 0.5rem 0;">₹${p.price}</div>
+                            <p style="font-size: 0.8rem; color: #666;">${p.period}</p>
+                            <ul style="font-size: 0.75rem; padding-left: 1rem; margin-top: 0.5rem; color: #555;">
+                                ${(p.features || []).slice(0, 3).map(f => `<li>${f}</li>`).join('')}
+                                ${p.features?.length > 3 ? '<li>...</li>' : ''}
+                            </ul>
+                        </div>
+                    `).join('');
+                }
+
+                document.getElementById('addPlanBtn')?.addEventListener('click', () => {
+                    document.getElementById('planForm').reset();
+                    document.getElementById('planId').value = '';
+                    document.getElementById('planModalTitle').textContent = 'Add New Plan';
+                    openModal('planModal');
+                });
+
+                window.editPlan = (id) => {
+                    const p = allPlans.find(item => item.id === id);
+                    if (!p) return;
+                    document.getElementById('planId').value = p.id;
+                    document.getElementById('planName').value = p.name;
+                    document.getElementById('planPrice').value = p.price;
+                    document.getElementById('planPeriod').value = p.period;
+                    document.getElementById('planRecommended').value = p.recommended ? 'true' : 'false';
+                    document.getElementById('planFeatures').value = (p.features || []).join('\n');
+                    document.getElementById('planModalTitle').textContent = 'Edit Plan';
+                    openModal('planModal');
+                };
+
+                document.getElementById('planForm')?.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    const id = document.getElementById('planId').value;
+                    const data = {
+                        name: document.getElementById('planName').value,
+                        price: parseInt(document.getElementById('planPrice').value),
+                        period: document.getElementById('planPeriod').value,
+                        recommended: document.getElementById('planRecommended').value === 'true',
+                        features: document.getElementById('planFeatures').value.split('\n').filter(f => f.trim())
+                    };
+                    const btn = e.target.querySelector('button[type="submit"]');
+                    showLoading(btn);
+                    const result = await saveMembershipPlan(data, id || null);
+                    hideLoading(btn);
+                    if (result.success) {
+                        showNotification('Plan saved!', 'success');
+                        closeModal('planModal');
+                        loadPlans();
+                    }
+                });
+
+                window.deletePlanEntry = async (id) => {
+                    if (confirm('Are you sure you want to delete this plan?')) {
+                        await deleteMembershipPlan(id);
+                        showNotification('Plan deleted', 'success');
+                        loadPlans();
+                    }
+                };
+
+                // --- Shared Modal Logic ---
+                function openModal(id) {
+                    const modal = document.getElementById(id);
+                    if (modal) {
+                        modal.classList.remove('hidden');
+                        modal.style.display = 'flex';
+                    }
+                }
+
+                window.closeModal = (id) => {
+                    const modal = document.getElementById(id);
+                    if (modal) {
+                        modal.classList.add('hidden');
+                        modal.style.display = 'none';
+                    }
+                };
+
+                ['editModal', 'serviceModal', 'planModal'].forEach(id => {
+                    document.getElementById(id)?.addEventListener('click', (e) => {
+                        if (e.target.id === id) closeModal(id);
+                    });
+                });
+
+                document.getElementById('cancelEditBtn')?.addEventListener('click', () => closeModal('editModal'));
+                document.getElementById('cancelServiceBtn')?.addEventListener('click', () => closeModal('serviceModal'));
+                document.getElementById('cancelPlanBtn')?.addEventListener('click', () => closeModal('planModal'));
+
+                // Load dashboard on page load
                 loadDashboard();
-            } else {
-                showNotification('Failed to update user', 'error');
-            }
-        });
-
-        // Cancel edit
-        document.getElementById('cancelEditBtn').addEventListener('click', () => {
-            const modal = document.getElementById('editModal');
-            modal.classList.add('hidden');
-            modal.style.display = 'none';
-            currentEditUserId = null;
-        });
-
-        // Close modal when clicking outside
-        document.getElementById('editModal').addEventListener('click', (e) => {
-            if (e.target.id === 'editModal') {
-                const modal = document.getElementById('editModal');
-                modal.classList.add('hidden');
-                modal.style.display = 'none';
-                currentEditUserId = null;
-            }
-        });
-
-        // Search functionality
-        document.getElementById('searchInput').addEventListener('input', (e) => {
-            applyFilters();
-        });
-
-        // Membership filter
-        document.getElementById('membershipFilter').addEventListener('change', () => {
-            applyFilters();
-        });
-
-        // Status filter
-        document.getElementById('statusFilter').addEventListener('change', () => {
-            applyFilters();
-        });
-
-        // Apply all filters
-        function applyFilters() {
-            const searchTerm = document.getElementById('searchInput').value;
-            const membershipFilter = document.getElementById('membershipFilter').value;
-            const statusFilter = document.getElementById('statusFilter').value;
-
-            let filtered = allUsers;
-
-            // Apply search
-            filtered = searchUsers(filtered, searchTerm);
-
-            // Apply membership filter
-            filtered = filterUsersByMembership(filtered, membershipFilter);
-
-            // Apply status filter
-            filtered = filterUsersByAccountStatus(filtered, statusFilter);
-
-            filteredUsers = filtered;
-            renderUsersTable(filteredUsers);
-        }
-
-        // Export to CSV
-        document.getElementById('exportBtn').addEventListener('click', () => {
-            exportUsersToCSV(filteredUsers);
-        });
-
-        // Logout
-        document.getElementById('adminLogoutBtn').addEventListener('click', async (e) => {
-            e.preventDefault();
-
-            const result = await adminLogout();
-
-            if (result.success) {
-                showNotification('Logged out successfully', 'success');
-                setTimeout(() => {
-                    window.location.href = 'login.html';
-                }, 1000);
-            }
-        });
-
-        // Set admin name
-        checkAdminAuthState((user, isAdmin) => {
-            if (user && isAdmin) {
-                document.getElementById('adminName').textContent = user.email.split('@')[0];
-            }
-        });
-
-        // Load dashboard on page load
-        loadDashboard();
-    </script>
+            </script>
 </body>
 
 </html>
