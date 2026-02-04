@@ -186,7 +186,7 @@
                 <h3 style="margin-bottom: 1.5rem;">Edit User</h3>
 
                 <div class="form-group">
-                    <label class="form-label">Membership Plan</label>
+                    <label class="form-label" for="editMembershipPlan">Membership Plan</label>
                     <select id="editMembershipPlan" class="form-input">
                         <option value="">None</option>
                         <option value="monthly">Monthly</option>
@@ -196,7 +196,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">Account Status</label>
+                    <label class="form-label" for="editAccountStatus">Account Status</label>
                     <select id="editAccountStatus" class="form-input">
                         <option value="active">Active</option>
                         <option value="inactive">Inactive</option>
@@ -223,27 +223,27 @@
                 <form id="serviceForm">
                     <input type="hidden" id="serviceId">
                     <div class="form-group">
-                        <label class="form-label">Service Name</label>
+                        <label class="form-label" for="serviceName">Service Name</label>
                         <input type="text" id="serviceName" class="form-input" required>
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Price (₹)</label>
+                        <label class="form-label" for="servicePrice">Price (₹)</label>
                         <input type="number" id="servicePrice" class="form-input" required>
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Description</label>
+                        <label class="form-label" for="serviceDesc">Description</label>
                         <textarea id="serviceDesc" class="form-input" rows="3" required></textarea>
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Icon Class (e.g., fas fa-car)</label>
+                        <label class="form-label" for="serviceIcon">Icon Class (e.g., fas fa-car)</label>
                         <input type="text" id="serviceIcon" class="form-input" required>
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Gradient Background (CSS)</label>
+                        <label class="form-label" for="serviceGradient">Gradient Background (CSS)</label>
                         <input type="text" id="serviceGradient" class="form-input" placeholder="linear-gradient(...)">
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Features (one per line)</label>
+                        <label class="form-label" for="serviceFeatures">Features (one per line)</label>
                         <textarea id="serviceFeatures" class="form-input" rows="4"></textarea>
                     </div>
                     <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
@@ -266,26 +266,26 @@
                 <form id="planForm">
                     <input type="hidden" id="planId">
                     <div class="form-group">
-                        <label class="form-label">Plan Name</label>
+                        <label class="form-label" for="planName">Plan Name</label>
                         <input type="text" id="planName" class="form-input" required>
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Price (₹)</label>
+                        <label class="form-label" for="planPrice">Price (₹)</label>
                         <input type="number" id="planPrice" class="form-input" required>
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Period (e.g., per month)</label>
+                        <label class="form-label" for="planPeriod">Period (e.g., per month)</label>
                         <input type="text" id="planPeriod" class="form-input" required>
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Recommended?</label>
+                        <label class="form-label" for="planRecommended">Recommended?</label>
                         <select id="planRecommended" class="form-input">
                             <option value="false">No</option>
                             <option value="true">Yes</option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Features (one per line)</label>
+                        <label class="form-label" for="planFeatures">Features (one per line)</label>
                         <textarea id="planFeatures" class="form-input" rows="6"></textarea>
                     </div>
                     <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
