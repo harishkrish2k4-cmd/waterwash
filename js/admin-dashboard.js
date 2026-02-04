@@ -173,19 +173,12 @@ export function exportUsersToCSV(users) {
 export async function getServices() {
     try {
         const servicesRef = collection(db, 'services');
-        // Removed orderBy to avoid index requirements on live site
-        const querySnapshot = await getDocs(servicesRef);
+        const q = query(servicesRef, orderBy('createdAt', 'desc'));
+        const querySnapshot = await getDocs(q);
 
         const services = [];
         querySnapshot.forEach((doc) => {
             services.push({ id: doc.id, ...doc.data() });
-        });
-
-        // Manual sort by createdAt
-        services.sort((a, b) => {
-            const dateA = a.createdAt?.seconds || 0;
-            const dateB = b.createdAt?.seconds || 0;
-            return dateB - dateA; // Descending
         });
 
         return { success: true, services };
@@ -200,17 +193,11 @@ export async function saveService(serviceData, serviceId = null) {
         const id = serviceId || serviceData.name.toLowerCase().replace(/\s+/g, '-');
         const serviceRef = doc(db, 'services', id);
 
-        const saveData = {
+        await setDoc(serviceRef, {
             ...serviceData,
-            updatedAt: serverTimestamp()
-        };
-
-        // Only set createdAt for new documents
-        if (!serviceId) {
-            saveData.createdAt = serverTimestamp();
-        }
-
-        await setDoc(serviceRef, saveData, { merge: true });
+            updatedAt: serverTimestamp(),
+            createdAt: serviceId ? serviceData.createdAt : serverTimestamp()
+        }, { merge: true });
 
         return { success: true, id };
     } catch (error) {
@@ -234,16 +221,13 @@ export async function deleteService(serviceId) {
 export async function getMembershipPlans() {
     try {
         const plansRef = collection(db, 'membershipPlans');
-        // Removed orderBy to avoid index requirements
-        const querySnapshot = await getDocs(plansRef);
+        const q = query(plansRef, orderBy('price', 'asc'));
+        const querySnapshot = await getDocs(q);
 
         const plans = [];
         querySnapshot.forEach((doc) => {
             plans.push({ id: doc.id, ...doc.data() });
         });
-
-        // Manual sort by price
-        plans.sort((a, b) => (a.price || 0) - (b.price || 0));
 
         return { success: true, plans };
     } catch (error) {
@@ -257,17 +241,11 @@ export async function saveMembershipPlan(planData, planId = null) {
         const id = planId || planData.name.toLowerCase().replace(/\s+/g, '-');
         const planRef = doc(db, 'membershipPlans', id);
 
-        const saveData = {
+        await setDoc(planRef, {
             ...planData,
-            updatedAt: serverTimestamp()
-        };
-
-        // Only set createdAt for new documents
-        if (!planId) {
-            saveData.createdAt = serverTimestamp();
-        }
-
-        await setDoc(planRef, saveData, { merge: true });
+            updatedAt: serverTimestamp(),
+            createdAt: planId ? planData.createdAt : serverTimestamp()
+        }, { merge: true });
 
         return { success: true, id };
     } catch (error) {
