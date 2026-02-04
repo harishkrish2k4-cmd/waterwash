@@ -17,6 +17,30 @@ const initialServices = [
         features: ['Exterior body wash', 'Interior vacuuming', 'Dashboard & console cleaning', 'Window cleaning', 'Tire shine & polish'],
         icon: 'fas fa-car',
         gradient: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)'
+    },
+    {
+        name: 'Engine Cleaning',
+        price: 300,
+        description: 'Deep cleaning of the engine bay to remove grease, dirt, and grime. Prevents overheating and looks great!',
+        features: ['Degreasing', 'High-pressure steam cleaning', 'Protective coating', 'Safety check'],
+        icon: 'fas fa-cogs',
+        gradient: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)'
+    },
+    {
+        name: 'Ceramic Coating',
+        price: 2500,
+        description: 'Advanced nano-ceramic coating for long-lasting protection, extreme gloss, and water repellency.',
+        features: ['9H Hardness', 'UV protection', 'Hydrophobic effect', '2-year durability'],
+        icon: 'fas fa-shield-alt',
+        gradient: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)'
+    },
+    {
+        name: 'Interior Detailing',
+        price: 800,
+        description: 'Thorough interior cleaning including seats, carpets, dashboard, and ceiling. Restore that new car smell!',
+        features: ['Deep extraction', 'Leather conditioning', 'Stain removal', 'Odor neutralization'],
+        icon: 'fas fa-chair',
+        gradient: 'linear-gradient(135deg, #16d9e3 0%, #30c7ec 47%, #46aef7 100%)'
     }
 ];
 
@@ -68,6 +92,22 @@ const initialMembershipPlans = {
         ],
         recommended: false,
         icon: 'fas fa-crown'
+    },
+    ultimate: {
+        name: 'Ultimate Membership',
+        price: 499,
+        period: 'per year',
+        features: [
+            'All Yearly benefits',
+            'Monthly full detailing',
+            'Engine wash every quarter',
+            'Ceramic coating top-up',
+            '24/7 Concierge service',
+            '30% discount on all spare parts',
+            'Unlimited roadside assistance'
+        ],
+        recommended: false,
+        icon: 'fas fa-gem'
     }
 };
 
