@@ -193,11 +193,17 @@ export async function saveService(serviceData, serviceId = null) {
         const id = serviceId || serviceData.name.toLowerCase().replace(/\s+/g, '-');
         const serviceRef = doc(db, 'services', id);
 
-        await setDoc(serviceRef, {
+        const payload = {
             ...serviceData,
-            updatedAt: serverTimestamp(),
-            createdAt: serviceId ? serviceData.createdAt : serverTimestamp()
-        }, { merge: true });
+            updatedAt: serverTimestamp()
+        };
+
+        // Only set createdAt for new documents
+        if (!serviceId) {
+            payload.createdAt = serverTimestamp();
+        }
+
+        await setDoc(serviceRef, payload, { merge: true });
 
         return { success: true, id };
     } catch (error) {
@@ -241,11 +247,17 @@ export async function saveMembershipPlan(planData, planId = null) {
         const id = planId || planData.name.toLowerCase().replace(/\s+/g, '-');
         const planRef = doc(db, 'membershipPlans', id);
 
-        await setDoc(planRef, {
+        const payload = {
             ...planData,
-            updatedAt: serverTimestamp(),
-            createdAt: planId ? planData.createdAt : serverTimestamp()
-        }, { merge: true });
+            updatedAt: serverTimestamp()
+        };
+
+        // Only set createdAt for new documents
+        if (!planId) {
+            payload.createdAt = serverTimestamp();
+        }
+
+        await setDoc(planRef, payload, { merge: true });
 
         return { success: true, id };
     } catch (error) {
