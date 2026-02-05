@@ -47,7 +47,7 @@ export function renderMemberships(plans) {
                 `).join('')}
             </ul>
             <div class="text-center">
-                <a href="register.html?plan=${plan.id}" class="btn ${plan.recommended ? 'btn-primary' : 'btn-secondary'} w-100">
+                <a href="payment.html?type=plan&id=${plan.id}" class="btn ${plan.recommended ? 'btn-primary' : 'btn-secondary'} w-100">
                     Subscribe / Register
                 </a>
             </div>

@@ -258,7 +258,7 @@ export function renderServices(services) {
                     </li>
                 `).join('')}
             </ul>
-            <a href="register.html?service=${service.id}" class="btn btn-outline" style="width: 100%; background: rgba(255, 255, 255, 0.2); border-color: white;">
+            <a href="payment.html?type=service&id=${service.id}" class="btn btn-outline" style="width: 100%; background: rgba(255, 255, 255, 0.2); border-color: white;">
                 Avail Service
             </a>
         </div>

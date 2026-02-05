@@ -124,7 +124,8 @@
                     <div class="text-center" style="margin-top: 1.5rem;">
                         <p style="color: var(--gray);">
                             Already have an account?
-                            <a href="login.html" style="color: var(--primary-blue); font-weight: 600;">Login here</a>
+                            <a href="login.html" id="loginLink"
+                                style="color: var(--primary-blue); font-weight: 600;">Login here</a>
                         </p>
                     </div>
 
@@ -183,6 +184,12 @@
             password: document.getElementById('password'),
             confirmPassword: document.getElementById('confirmPassword')
         };
+        const loginLink = document.getElementById('loginLink');
+
+        // Preserve query parameters for the login link
+        if (window.location.search) {
+            loginLink.href = `login.html${window.location.search}`;
+        }
 
         // Clear errors on input
         Object.values(inputs).forEach(input => {
@@ -244,9 +251,18 @@
             if (result.success) {
                 showNotification('Account created successfully! Redirecting...', 'success');
 
-                // Redirect to memberships page after 1.5 seconds
+                // Check for redirect parameter
+                const urlParams = new URLSearchParams(window.location.search);
+                const redirect = urlParams.get('redirect');
+                const type = urlParams.get('type');
+                const id = urlParams.get('id');
+
                 setTimeout(() => {
-                    window.location.href = 'memberships.html';
+                    if (redirect === 'payment' && type && id) {
+                        window.location.href = `payment.html?type=${type}&id=${id}`;
+                    } else {
+                        window.location.href = 'memberships.html';
+                    }
                 }, 1500);
             } else {
                 showNotification(result.error, 'error');
