@@ -251,13 +251,16 @@ export function renderServices(services) {
                 ₹${service.price}
             </div>
             <p class="card-text" style="color: rgba(255, 255, 255, 0.9); font-size: 1rem;">${service.description}</p>
-            <ul style="list-style: none; padding: 0; margin-top: 1.5rem; text-align: left;">
+            <ul style="list-style: none; padding: 0; margin-top: 1.5rem; text-align: left; margin-bottom: 1.5rem;">
                 ${(service.features || []).map(feature => `
                     <li style="padding: 0.5rem 0; color: rgba(255, 255, 255, 0.9);">
                         <i class="fas fa-check" style="color: #4ade80; margin-right: 0.5rem;"></i> ${feature}
                     </li>
                 `).join('')}
             </ul>
+            <a href="register.html?service=${service.id}" class="btn btn-outline" style="width: 100%; background: rgba(255, 255, 255, 0.2); border-color: white;">
+                Avail Service
+            </a>
         </div>
     `).join('');
 }
