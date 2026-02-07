@@ -2,10 +2,10 @@
 
 import { auth, db } from './firebase-config.js';
 import {
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
     signOut,
-    onAuthStateChanged,
-    RecaptchaVerifier,
-    signInWithPhoneNumber
+    onAuthStateChanged
 } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 import {
     doc,
@@ -14,7 +14,9 @@ import {
     serverTimestamp
 } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 import {
+    validateEmail,
     validatePhone,
+    validatePassword,
     showLoading,
     hideLoading,
     showError,
@@ -22,95 +24,105 @@ import {
     showNotification
 } from './main.js';
 
-// Setup Recaptcha
-export function setupRecaptcha(elementId) {
-    if (!window.recaptchaVerifier) {
-        window.recaptchaVerifier = new RecaptchaVerifier(auth, elementId, {
-            'size': 'invisible',
-            'callback': (response) => {
-                // reCAPTCHA solved, allow signInWithPhoneNumber.
-                console.log("Recaptcha verified");
-            },
-            'expired-callback': () => {
-                // Response expired. Ask user to solve reCAPTCHA again.
-                console.log("Recaptcha expired");
-                window.recaptchaVerifier.clear();
-                window.recaptchaVerifier = null;
-            }
-        });
-    }
-    return window.recaptchaVerifier;
-}
-
-// Initiate Phone Login (Send OTP)
-export async function initiatePhoneLogin(phoneNumber) {
+// Register new user
+export async function registerUser(fullName, phone, password) {
     try {
-        if (!validatePhone(phoneNumber)) {
+        // Validate inputs
+        if (!fullName || fullName.trim().length < 2) {
+            throw new Error('Please enter a valid full name');
+        }
+
+        if (!validatePhone(phone)) {
             throw new Error('Please enter a valid phone number');
         }
 
-        // Ensure Recaptcha is set up
-        const appVerifier = window.recaptchaVerifier;
-        if (!appVerifier) {
-            throw new Error('Recaptcha not initialized. Please refresh the page.');
+        if (!validatePassword(password)) {
+            throw new Error('Password must be at least 6 characters long');
         }
 
-        const confirmationResult = await signInWithPhoneNumber(auth, phoneNumber, appVerifier);
-        window.confirmationResult = confirmationResult;
-        return { success: true, message: 'OTP sent successfully' };
-    } catch (error) {
-        console.error('Phone Auth Error:', error);
-        window.recaptchaVerifier?.render().then(widgetId => {
-            grecaptcha.reset(widgetId);
+        // Create email from phone number (internal use only)
+        const email = `${phone.trim()}@waterwash.local`;
+
+        // Create user account
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+
+        // Store user data in Firestore
+        await setDoc(doc(db, 'users', user.uid), {
+            fullName: fullName.trim(),
+            email: email,
+            phone: phone.trim(),
+            createdAt: serverTimestamp(),
+            membershipPlan: null,
+            membershipStartDate: null,
+            membershipStatus: 'inactive',
+            accountStatus: 'active'
         });
-        return { success: false, error: error.message };
+
+        return { success: true, user };
+    } catch (error) {
+        console.error('Registration error:', error);
+
+        // Handle specific Firebase errors
+        let errorMessage = error.message;
+
+        if (error.code === 'auth/email-already-in-use') {
+            errorMessage = 'This phone number is already registered. Please login instead.';
+        } else if (error.code === 'auth/weak-password') {
+            errorMessage = 'Password is too weak. Please use a stronger password.';
+        }
+
+        return { success: false, error: errorMessage };
     }
 }
 
-// Verify OTP
-export async function verifyOTP(otp) {
+// Login user
+export async function loginUser(phone, password) {
     try {
-        if (!window.confirmationResult) {
-            throw new Error('No OTP request found. Please try again.');
+        if (!validatePhone(phone)) {
+            throw new Error('Please enter a valid phone number');
         }
 
-        const result = await window.confirmationResult.confirm(otp);
-        const user = result.user;
+        if (!password) {
+            throw new Error('Please enter your password');
+        }
 
-        // Check if user profile exists in Firestore
-        const userDocRef = doc(db, 'users', user.uid);
-        const userDoc = await getDoc(userDocRef);
+        // Create email from phone number
+        const email = `${phone.trim()}@waterwash.local`;
+
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+
+        // Get user data from Firestore
+        const userDoc = await getDoc(doc(db, 'users', user.uid));
 
         if (!userDoc.exists()) {
-            // New user - Create default profile
-            await setDoc(userDocRef, {
-                phone: user.phoneNumber,
-                createdAt: serverTimestamp(),
-                membershipPlan: null,
-                membershipStatus: 'inactive',
-                accountStatus: 'active',
-                isProfileComplete: false
-            });
-            return { success: true, user, isNewUser: true };
+            throw new Error('User data not found');
         }
 
-        return { success: true, user, isNewUser: false };
-    } catch (error) {
-        console.error('OTP Verification Error:', error);
-        return { success: false, error: 'Invalid OTP. Please try again.' };
-    }
-}
+        const userData = userDoc.data();
 
-// Update User Profile (for new users)
-export async function updateUserProfile(uid, data) {
-    try {
-        await setDoc(doc(db, 'users', uid), {
-            ...data,
-            isProfileComplete: true
-        }, { merge: true });
-        return { success: true };
+        // Check if account is active
+        if (userData.accountStatus === 'inactive') {
+            await signOut(auth);
+            throw new Error('Your account has been deactivated. Please contact support.');
+        }
+
+        return { success: true, user, userData };
     } catch (error) {
-        return { success: false, error: error.message };
+        console.error('Login error:', error);
+
+        let errorMessage = error.message;
+
+        if (error.code === 'auth/user-not-found' || error.code === 'auth/invalid-email') {
+            errorMessage = 'No account found with this phone number. Please register first.';
+        } else if (error.code === 'auth/wrong-password') {
+            errorMessage = 'Incorrect password. Please try again.';
+        } else if (error.code === 'auth/too-many-requests') {
+            errorMessage = 'Too many failed attempts. Please try again later.';
+        }
+
+        return { success: false, error: errorMessage };
     }
 }
 
